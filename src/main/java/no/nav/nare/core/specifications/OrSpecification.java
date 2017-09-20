@@ -20,14 +20,14 @@ public class OrSpecification<T> extends AbstractSpecification<T> {
 
     @Override
     public Evaluation evaluate(final T t) {
-        return new OrEvaluation(identifikator(), beskrivelse(),spec1.evaluate(t), spec2.evaluate(t));
+        return new OrEvaluation(identity(), description(),spec1.evaluate(t), spec2.evaluate(t));
     }
 
 
     @Override
-    public String identifikator() {
+    public String identity() {
         if (id.isEmpty()) {
-            return "(" + spec1.identifikator() + " ELLER " + spec2.identifikator() + ")";
+            return "(" + spec1.identity() + " OR " + spec2.identity() + ")";
         } else {
             return id;
         }
@@ -36,9 +36,9 @@ public class OrSpecification<T> extends AbstractSpecification<T> {
 
 
     @Override
-    public String beskrivelse() {
+    public String description() {
         if (beskrivelse.isEmpty()) {
-            return "(" + spec1.beskrivelse() + " ELLER " + spec2.beskrivelse() + ")";
+            return "(" + spec1.description() + " OR " + spec2.description() + ")";
         } else {
             return beskrivelse;
         }
@@ -46,7 +46,7 @@ public class OrSpecification<T> extends AbstractSpecification<T> {
 
     @Override
     public RuleDescription ruleDescription() {
-        return new RuleDescription(Operator.OR, identifikator(), beskrivelse(), spec1.ruleDescription(), spec2.ruleDescription());
+        return new RuleDescription(Operator.OR, identity(), description(), spec1.ruleDescription(), spec2.ruleDescription());
     }
 
 

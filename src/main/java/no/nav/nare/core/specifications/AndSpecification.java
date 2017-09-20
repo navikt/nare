@@ -19,22 +19,22 @@ public class AndSpecification<T> extends AbstractSpecification<T> {
     }
 
     public Evaluation evaluate(final T t) {
-        return new AndEvaluation(identifikator(), beskrivelse(), spec1.evaluate(t), spec2.evaluate(t));
+        return new AndEvaluation(identity(), description(), spec1.evaluate(t), spec2.evaluate(t));
     }
 
     @Override
-    public String identifikator() {
+    public String identity() {
         if (id.isEmpty()) {
-            return "(" + spec1.identifikator() + " OG " + spec2.identifikator() +")";
+            return "(" + spec1.identity() + " AND " + spec2.identity() +")";
         } else {
             return id;
         }
     }
 
     @Override
-    public String beskrivelse() {
+    public String description() {
         if (beskrivelse.isEmpty()){
-            return "(" + spec1.beskrivelse() + " OG " +  spec2.beskrivelse() + ")";
+            return "(" + spec1.description() + " AND " +  spec2.description() + ")";
         }else{
             return beskrivelse;
         }
@@ -42,7 +42,7 @@ public class AndSpecification<T> extends AbstractSpecification<T> {
 
     @Override
     public RuleDescription ruleDescription() {
-        return new RuleDescription(Operator.AND, identifikator(), beskrivelse(), spec1.ruleDescription(),spec2.ruleDescription());
+        return new RuleDescription(Operator.AND, identity(), description(), spec1.ruleDescription(),spec2.ruleDescription());
     }
 
 }

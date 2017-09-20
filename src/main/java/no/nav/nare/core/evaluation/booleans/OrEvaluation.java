@@ -3,7 +3,7 @@ package no.nav.nare.core.evaluation.booleans;
 import no.nav.nare.core.evaluation.AggregatedEvaluation;
 import no.nav.nare.core.evaluation.Evaluation;
 import no.nav.nare.core.evaluation.Operator;
-import no.nav.nare.core.evaluation.Resultat;
+import no.nav.nare.core.evaluation.Result;
 
 public class OrEvaluation extends AggregatedEvaluation {
 
@@ -13,24 +13,24 @@ public class OrEvaluation extends AggregatedEvaluation {
     }
 
     @Override
-    public Resultat result() {
+    public Result result() {
         return first().result().or(second().result());
     }
 
     @Override
     public String reason() {
-        if (result().equals(Resultat.JA)){
-            return "Tilfredstiller " + ruleOrIdentification();
+        if (result().equals(Result.YES)){
+            return "Satisfies " + ruleOrIdentification();
         }else{
-            return "Tilfredstiller hverken " + first().ruleIdentification() + " eller " + second().ruleIdentification();
+            return "Does not satisfy either " + first().ruleIdentification() + " nor " + second().ruleIdentification();
         }
 
     }
 
 
     private String ruleOrIdentification() {
-        String firstID = first().result().equals(Resultat.JA) ? first().ruleIdentification() : "";
-        String secondID = second().result().equals(Resultat.JA) ? second().ruleIdentification() : "";
+        String firstID = first().result().equals(Result.YES) ? first().ruleIdentification() : "";
+        String secondID = second().result().equals(Result.YES) ? second().ruleIdentification() : "";
         if (firstID.isEmpty()) return secondID;
         if (secondID.isEmpty()) return firstID;
         return firstID + " OG " + secondID;

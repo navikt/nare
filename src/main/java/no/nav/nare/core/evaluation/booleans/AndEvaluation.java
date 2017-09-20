@@ -3,7 +3,7 @@ package no.nav.nare.core.evaluation.booleans;
 import no.nav.nare.core.evaluation.AggregatedEvaluation;
 import no.nav.nare.core.evaluation.Evaluation;
 import no.nav.nare.core.evaluation.Operator;
-import no.nav.nare.core.evaluation.Resultat;
+import no.nav.nare.core.evaluation.Result;
 
 public class AndEvaluation extends AggregatedEvaluation {
 
@@ -13,16 +13,16 @@ public class AndEvaluation extends AggregatedEvaluation {
     }
 
     @Override
-    public Resultat result() {
+    public Result result() {
         return first().result().and(second().result());
     }
 
     @Override
     public String reason() {
-        if (result().equals(Resultat.JA)){
-            return "Tilfredstiller både " + first().ruleIdentification() + " og " + second().ruleIdentification();
+        if (result().equals(Result.YES)){
+            return "Satisfies both " + first().ruleIdentification() + " and " + second().ruleIdentification();
         }else{
-            return "Tilfredstiller ikke både " + first().ruleIdentification() + " og " + second().ruleIdentification();
+            return "Does not satisfy both " + first().ruleIdentification() + " and " + second().ruleIdentification();
         }
 
 

@@ -1,4 +1,4 @@
-package no.nav.nare.core.regelsettyper.regler;
+package no.nav.nare.core.regelsettyper.rules;
 
 import no.nav.nare.core.evaluation.Evaluation;
 import no.nav.nare.input.Soknad;

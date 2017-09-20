@@ -5,5 +5,5 @@ package no.nav.nare.core.evaluation;
  */
 public enum Operator {
 
-    AND, OR, SINGLE, NOT
+    AND, OR, NOT
 }

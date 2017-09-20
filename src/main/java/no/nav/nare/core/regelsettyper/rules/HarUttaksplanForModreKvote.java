@@ -1,4 +1,4 @@
-package no.nav.nare.core.regelsettyper.regler;
+package no.nav.nare.core.regelsettyper.rules;
 
 
 import no.nav.nare.core.evaluation.Evaluation;
@@ -33,7 +33,7 @@ public class HarUttaksplanForModreKvote extends AbstractSpecification<Soknad> {
     }
 
     @Override
-    public String identifikator() {
+    public String identity() {
         return id;
     }
 

@@ -6,19 +6,19 @@ public class SingleEvaluation implements Evaluation {
 
     private String ruleIdentification;
     private String ruleDescription;
-    private Resultat resultat;
+    private Result result;
     private String reason;
 
-    public SingleEvaluation(Resultat resultat, String ruleIdentification, String ruleDescription, String reason, Object... stringformatArguments) {
+    public SingleEvaluation(Result result, String ruleIdentification, String ruleDescription, String reason, Object... stringformatArguments) {
         this.ruleIdentification = ruleIdentification;
         this.ruleDescription = ruleDescription;
-        this.resultat = resultat;
+        this.result = result;
         this.reason = MessageFormat.format(reason, stringformatArguments);
     }
 
     @Override
-    public Resultat result() {
-        return resultat;
+    public Result result() {
+        return result;
     }
 
     @Override

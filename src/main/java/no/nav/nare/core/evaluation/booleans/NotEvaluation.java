@@ -3,7 +3,7 @@ package no.nav.nare.core.evaluation.booleans;
 import no.nav.nare.core.evaluation.AggregatedEvaluation;
 import no.nav.nare.core.evaluation.Evaluation;
 import no.nav.nare.core.evaluation.Operator;
-import no.nav.nare.core.evaluation.Resultat;
+import no.nav.nare.core.evaluation.Result;
 
 public class NotEvaluation extends AggregatedEvaluation {
 
@@ -13,16 +13,16 @@ public class NotEvaluation extends AggregatedEvaluation {
     }
 
     @Override
-    public Resultat result() {
+    public Result result() {
         return first().result().not();
     }
 
     @Override
     public String reason() {
-        if (result().equals(Resultat.JA)){
-            return "Tilfredstiller det motsatte av " + first().ruleIdentification();
+        if (result().equals(Result.YES)){
+            return "Satisfies the inverse of " + first().ruleIdentification();
         }else{
-            return "Tilfredstiller ikke det motsatte av " + first().ruleIdentification();
+            return "Does not satisfy the inverse of " + first().ruleIdentification();
         }
 
 

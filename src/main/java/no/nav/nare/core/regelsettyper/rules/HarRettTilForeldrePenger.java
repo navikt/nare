@@ -1,4 +1,4 @@
-package no.nav.nare.core.regelsettyper.regler;
+package no.nav.nare.core.regelsettyper.rules;
 
 import no.nav.nare.core.evaluation.Evaluation;
 import no.nav.nare.input.Person;
@@ -36,11 +36,11 @@ public class HarRettTilForeldrePenger extends AbstractSpecification<Soknad> {
     }
 
     @Override
-    public String identifikator() {
+    public String identity() {
         return  "FK_VK_10.1";    }
 
     @Override
-    public String beskrivelse() {
+    public String description() {
         return "Har søker med rolle " + rolle +" rett til foreldrepenger?" ;
     }
 

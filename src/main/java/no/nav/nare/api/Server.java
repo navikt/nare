@@ -1,3 +1,4 @@
+
 package no.nav.nare.api;
 
 import com.google.gson.Gson;

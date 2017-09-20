@@ -9,11 +9,11 @@ public interface Specification<T> {
 
     Evaluation evaluate(T t);
 
-    Specification<T> og(Specification<T> specification);
-    Specification<T> eller(Specification<T> specification);
+    Specification<T> and(Specification<T> specification);
+    Specification<T> or(Specification<T> specification);
 
-    String identifikator();
-    String beskrivelse();
+    String identity();
+    String description();
 
     RuleDescription ruleDescription();
 

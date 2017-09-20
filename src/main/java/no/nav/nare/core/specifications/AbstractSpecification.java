@@ -3,7 +3,7 @@ package no.nav.nare.core.specifications;
 
 import com.google.gson.GsonBuilder;
 import no.nav.nare.core.evaluation.Evaluation;
-import no.nav.nare.core.evaluation.Resultat;
+import no.nav.nare.core.evaluation.Result;
 import no.nav.nare.core.evaluation.SingleEvaluation;
 
 public abstract class AbstractSpecification<T> implements Specification<T> {
@@ -13,31 +13,31 @@ public abstract class AbstractSpecification<T> implements Specification<T> {
     protected AbstractSpecification(){
     }
 
-    public Specification<T> og(final Specification<T> specification) {
+    public Specification<T> and(final Specification<T> specification) {
         return new AndSpecification<T>(this, specification);
     }
 
-    public Specification<T> eller(final Specification<T> specification) {
+    public Specification<T> or(final Specification<T> specification) {
         return new OrSpecification<T>(this, specification);
     }
 
 
     public Evaluation ja(String reason, Object... stringformatArguments){
-        return new SingleEvaluation(Resultat.JA, identifikator(),beskrivelse(), reason, stringformatArguments);
+        return new SingleEvaluation(Result.YES, identity(), description(), reason, stringformatArguments);
     }
 
     public Evaluation nei(String reason, Object... stringformatArguments){
-        return  new SingleEvaluation(Resultat.NEI, identifikator(), beskrivelse(), reason, stringformatArguments);
+        return  new SingleEvaluation(Result.NO, identity(), description(), reason, stringformatArguments);
     }
 
 
     @Override
     public RuleDescription ruleDescription() {
-        return new RuleDescription(identifikator(),beskrivelse());
+        return new RuleDescription(identity(), description());
     }
 
     @Override
-    public String identifikator() {
+    public String identity() {
         if (id.isEmpty()) {
             return Integer.toString(this.hashCode());
         } else {
@@ -46,7 +46,7 @@ public abstract class AbstractSpecification<T> implements Specification<T> {
     }
 
     @Override
-    public String beskrivelse(){
+    public String description(){
         return beskrivelse;
     }
 
@@ -64,7 +64,7 @@ public abstract class AbstractSpecification<T> implements Specification<T> {
 
     @Override
     public String toString() {
-        System.out.println(this.beskrivelse());
+        System.out.println(this.description());
         return new GsonBuilder().setPrettyPrinting().create().toJson(this);
     }
 }

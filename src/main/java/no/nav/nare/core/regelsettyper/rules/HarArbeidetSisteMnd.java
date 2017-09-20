@@ -1,4 +1,4 @@
-package no.nav.nare.core.regelsettyper.regler;
+package no.nav.nare.core.regelsettyper.rules;
 
 
 import no.nav.nare.core.evaluation.Evaluation;
@@ -28,12 +28,12 @@ public class HarArbeidetSisteMnd extends AbstractSpecification<Soknad> {
     }
 
     @Override
-    public String identifikator() {
+    public String identity() {
         return "FK_VK_10.x";
     }
 
     @Override
-    public String beskrivelse() {
+    public String description() {
         return "Har dokumentert sammenhengende arbeid siste " + month + " mnd";
     }
 

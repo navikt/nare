@@ -6,7 +6,7 @@ import no.nav.nare.core.evaluation.Operator;
 import no.nav.nare.core.evaluation.booleans.NotEvaluation;
 
 /**
- * NOT decorator, used to create a new specifcation that is the inverse (IKKE) of the given spec.
+ * NOT decorator, used to create a new specifcation that is the inverse (NOT) of the given spec.
  */
 public class NotSpecification<T> extends AbstractSpecification<T> {
 
@@ -22,13 +22,13 @@ public class NotSpecification<T> extends AbstractSpecification<T> {
 
     @Override
     public Evaluation evaluate(final T t) {
-        return new NotEvaluation(identifikator(), beskrivelse(), spec1.evaluate(t));
+        return new NotEvaluation(identity(), description(), spec1.evaluate(t));
     }
 
     @Override
-    public String identifikator() {
+    public String identity() {
         if (id.isEmpty()) {
-            return "(IKKE " + spec1.identifikator() + ")";
+            return "(NOT " + spec1.identity() + ")";
         } else {
             return id;
         }
@@ -37,9 +37,9 @@ public class NotSpecification<T> extends AbstractSpecification<T> {
 
 
     @Override
-    public String beskrivelse() {
+    public String description() {
         if (beskrivelse.isEmpty()){
-            return "(IKKE " + spec1.beskrivelse() + ")";
+            return "(NOT " + spec1.description() + ")";
         }else{
             return beskrivelse;
         }
@@ -48,6 +48,6 @@ public class NotSpecification<T> extends AbstractSpecification<T> {
 
     @Override
     public RuleDescription ruleDescription() {
-        return new RuleDescription(Operator.NOT, identifikator(), beskrivelse(), spec1.ruleDescription());
+        return new RuleDescription(Operator.NOT, identity(), description(), spec1.ruleDescription());
     }
 }

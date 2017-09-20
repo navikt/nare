@@ -9,7 +9,7 @@ public abstract class AggregatedEvaluation implements Evaluation {
     private  String ruleIdentification;
     private  String ruleDescription;
     private Operator operator;
-    private Resultat resultat;
+    private Result result;
 
     private String reason;
     private List<Evaluation> children;
@@ -19,7 +19,7 @@ public abstract class AggregatedEvaluation implements Evaluation {
         this.children = Arrays.asList(children);
         this.ruleIdentification = id;
         this.ruleDescription = ruleDescription;
-        this.resultat = result();
+        this.result = result();
         this.reason = reason();
     }
 

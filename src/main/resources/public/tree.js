@@ -82,7 +82,7 @@ function update(source) {
             .type( function(d) { return getType(d) }))
         .on('mouseover', tip.show)
         .on('mouseout', tip.hide)
-        .attr("class", function(d){ return d.resultat=="JA"? "nodeYes": "nodeNo"})
+        .attr("class", function(d){ return d.result=="YES"? "nodeYes": "nodeNo"})
 
 
 
@@ -103,7 +103,7 @@ function update(source) {
         .attr("dy", "0.35em")
         .attr("text-anchor", "middle")
         .text(function (d) {
-            return d.resultat;
+            return d.result;
         })
         .on('mouseover', tip.show)
         .on('mouseout', tip.hide)
@@ -118,7 +118,7 @@ function update(source) {
 
     // Enter the links.
     link.enter().insert("path", "g")
-        .attr("class", function(d){ return d.target.resultat=="JA" ? "linkyes": "linkno"})
+        .attr("class", function(d){ return d.target.result=="YES" ? "linkyes": "linkno"})
         .attr("d", diagonal);
 
 
