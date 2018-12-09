@@ -30,6 +30,10 @@ public abstract class AbstractSpecification<T> implements Specification<T> {
         return  new SingleEvaluation(Result.NO, identity(), description(), reason, stringformatArguments);
     }
 
+    public Evaluation kanskje(String reason, Object ... stringformatArguments){
+        return new SingleEvaluation(Result.MAYBE, identity(), description(), reason, stringformatArguments);
+    }
+
 
     @Override
     public RuleDescription ruleDescription() {
