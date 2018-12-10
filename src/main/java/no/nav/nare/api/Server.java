@@ -18,6 +18,7 @@ public class Server {
         port(1337);
         staticFiles.location("/public");
         get("/api/vurdering/modrekvote", (req, res) -> Ruleset.modrekvote().evaluer(dummySoknad()), gson::toJson);
+        get("/api/vurdering/kanskjekvote", (req, res) -> Ruleset.kanskjekvote().evaluer(adopsjonSoknad()), gson::toJson);
     }
 
 
@@ -27,6 +28,14 @@ public class Server {
 
         mor.setUttaksplan(Uttaksplan.SAMMENHENGENDE);
         return Soknad.fodselSøknad(mor).medSøker(far);
+    }
+
+    private static Soknad adopsjonSoknad() {
+        Person far = new Person("Far", Rolle.FAR, "X", 500000, 80, "Oslo", true);
+        Person mor = new Person("Mor", Rolle.MOR, "Y", 600000, 24, "Oslo", true);
+
+        mor.setUttaksplan(Uttaksplan.INNEN_3_AAR);
+        return Soknad.adopsjonSøknad(mor).medSøker(far);
     }
 
 }

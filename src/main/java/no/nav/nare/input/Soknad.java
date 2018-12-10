@@ -42,6 +42,10 @@ public class Soknad implements Soker {
         return new Soknad(hovedsøker, Soknadstype.FODSEL);
     }
 
+    public static Soknad adopsjonSøknad(Person hovedsøker){
+        return new Soknad(hovedsøker, Soknadstype.ADOPSJON);
+    }
+
 
 
     public Optional<Person> getSøker(Rolle rolle) {
