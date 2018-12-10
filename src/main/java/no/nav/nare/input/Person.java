@@ -29,8 +29,9 @@ public class Person{
         this.institusjonsOpphold = new ArrayList<>();
     }
 
-    public void setUttaksplan(Uttaksplan uttaksplan){
+    public Person withtUttaksplan(Uttaksplan uttaksplan){
         this.uttaksplan = uttaksplan;
+        return this;
     }
 
     public Optional<Uttaksplan> getUttaksplan(){

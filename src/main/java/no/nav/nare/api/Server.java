@@ -2,12 +2,17 @@
 package no.nav.nare.api;
 
 import com.google.gson.Gson;
-import no.nav.nare.core.regelsettyper.Ruleset;
+import no.nav.nare.core.evaluation.Evaluation;
 import no.nav.nare.input.Person;
 import no.nav.nare.input.Rolle;
-import no.nav.nare.input.Soknad;
 import no.nav.nare.input.Uttaksplan;
+import spark.Response;
 
+import static no.nav.nare.core.regelsettyper.Ruleset.kanskjekvote;
+import static no.nav.nare.core.regelsettyper.Ruleset.modrekvote;
+import static no.nav.nare.input.Soknad.adopsjonSøknad;
+import static no.nav.nare.input.Soknad.fodselSøknad;
+import static no.nav.nare.input.Uttaksplan.*;
 import static spark.Spark.*;
 
 
@@ -17,25 +22,25 @@ public class Server {
         Gson gson = new Gson();
         port(1337);
         staticFiles.location("/public");
-        get("/api/vurdering/modrekvote", (req, res) -> Ruleset.modrekvote().evaluer(dummySoknad()), gson::toJson);
-        get("/api/vurdering/kanskjekvote", (req, res) -> Ruleset.kanskjekvote().evaluer(adopsjonSoknad()), gson::toJson);
+
+        get("/api/vurdering/modrekvote", (req, res) ->
+                asJson(modrekvote().evaluer(fodselSøknad(mor()).medSøker(far())), res), gson::toJson);
+
+        get("/api/vurdering/kanskjekvote", (req, res) ->
+                asJson(kanskjekvote().evaluer(adopsjonSøknad(mor()).medSøker(far())), res), gson::toJson);
     }
 
-
-    private static Soknad dummySoknad() {
-        Person far = new Person("Far", Rolle.FAR, "X", 500000, 80, "Oslo", true);
-        Person mor = new Person("Mor", Rolle.MOR, "Y", 600000, 24, "Oslo", true);
-
-        mor.setUttaksplan(Uttaksplan.SAMMENHENGENDE);
-        return Soknad.fodselSøknad(mor).medSøker(far);
+    private static Evaluation asJson(Evaluation ruleset, Response res) {
+        res.type("application/json");
+        return ruleset;
     }
 
-    private static Soknad adopsjonSoknad() {
-        Person far = new Person("Far", Rolle.FAR, "X", 500000, 80, "Oslo", true);
-        Person mor = new Person("Mor", Rolle.MOR, "Y", 600000, 24, "Oslo", true);
+    private static Person far() {
+        return new Person("Far", Rolle.FAR, "X", 500000, 80, "Oslo", true);
+    }
 
-        mor.setUttaksplan(Uttaksplan.INNEN_3_AAR);
-        return Soknad.adopsjonSøknad(mor).medSøker(far);
+    private static Person mor() {
+        return new Person("Mor", Rolle.MOR, "Y", 600000, 24, "Oslo", true).withtUttaksplan(INNEN_3_AAR);
     }
 
 }
