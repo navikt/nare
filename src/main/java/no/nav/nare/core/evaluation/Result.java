@@ -4,7 +4,8 @@ package no.nav.nare.core.evaluation;
 public enum Result {
 
     YES(-1, "NO"),
-    NO(1, "YES");
+    NO(1, "YES"),
+    MAYBE(0, "MAYBE");
 
     private final int weight;
     private String inverse;

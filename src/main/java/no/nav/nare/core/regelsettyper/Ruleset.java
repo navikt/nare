@@ -16,6 +16,10 @@ public class Ruleset {
         return new Modrekvote();
     }
 
+    public static Ruleset kanskjekvote() {
+        return new Kanskjekvote();
+    }
+
     public Specification rule(String id, String beskrivelse, Specification specification) {
         return specification.medBeskrivelse(beskrivelse).medID(id);
     }

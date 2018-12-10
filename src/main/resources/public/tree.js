@@ -23,7 +23,7 @@ var svg = d3.select("body").append("svg")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 // load the external data
-d3.json("/api/vurdering/modrekvote", function (error, root) {
+d3.json("/api/vurdering/kanskjekvote", function (error, root) {
     update(root);
 });
 
@@ -82,7 +82,13 @@ function update(source) {
             .type( function(d) { return getType(d) }))
         .on('mouseover', tip.show)
         .on('mouseout', tip.hide)
-        .attr("class", function(d){ return d.result=="YES"? "nodeYes": "nodeNo"})
+        .attr("class", function(d){
+            switch (d.result){
+                case "YES": return "nodeYes"
+                case "NO" : return "nodeNo"
+                case "MAYBE": return "nodeMaybe"
+            }
+        })
 
 
 
@@ -118,7 +124,13 @@ function update(source) {
 
     // Enter the links.
     link.enter().insert("path", "g")
-        .attr("class", function(d){ return d.target.result=="YES" ? "linkyes": "linkno"})
+        .attr("class", function(d){
+            switch (d.target.result){
+                case "YES": return "linkYes"
+                case "NO" : return "linkNo"
+                case "MAYBE": return "linkMaybe"
+            }
+        })
         .attr("d", diagonal);
 
 
