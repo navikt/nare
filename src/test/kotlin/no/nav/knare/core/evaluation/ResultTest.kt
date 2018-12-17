@@ -1,13 +1,13 @@
 import org.junit.Test
 
-import no.nav.knare.core.evaluations.Result.*
+import no.nav.knare.core.evaluations.Resultat.*
 import org.assertj.core.api.Assertions.*
 
 class ResultTest {
 
     @Test
     fun allPermutations() {
-        // and
+        // og
         assertThat(YES.and(YES)).isEqualTo(YES)
         assertThat(YES.and(NO)).isEqualTo(NO)
         assertThat(NO.and(YES)).isEqualTo(NO)
@@ -19,7 +19,7 @@ class ResultTest {
         assertThat(MAYBE.and(YES)).isEqualTo(MAYBE)
         assertThat(MAYBE.and(NO)).isEqualTo(NO)
 
-        // or
+        // eller
         assertThat(YES.or(YES)).isEqualTo(YES)
         assertThat(YES.or(NO)).isEqualTo(YES)
         assertThat(NO.or(YES)).isEqualTo(YES)
@@ -31,7 +31,7 @@ class ResultTest {
         assertThat(MAYBE.or(YES)).isEqualTo(YES)
         assertThat(MAYBE.or(NO)).isEqualTo(MAYBE)
 
-        // not
+        // ikke
         assertThat(YES.not()).isEqualTo(NO)
         assertThat(NO.not()).isEqualTo(YES)
         assertThat(MAYBE.not()).isEqualTo(MAYBE)

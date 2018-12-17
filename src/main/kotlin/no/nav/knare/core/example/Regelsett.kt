@@ -1,35 +1,35 @@
 package no.nav.knare.core.example
 
-import no.nav.knare.core.evaluations.Evaluation
-import no.nav.knare.core.evaluations.Evaluation.Companion.ja
-import no.nav.knare.core.evaluations.Evaluation.Companion.nei
-import no.nav.knare.core.specifications.Specification
-import no.nav.knare.core.specifications.Specification.Companion.not
-import no.nav.knare.core.specifications.Specification.Companion.rule
+import no.nav.knare.core.evaluations.Evaluering
+import no.nav.knare.core.evaluations.Evaluering.Companion.ja
+import no.nav.knare.core.evaluations.Evaluering.Companion.nei
+import no.nav.knare.core.specifications.Spesifikasjon
+import no.nav.knare.core.specifications.Spesifikasjon.Companion.ikke
+import no.nav.knare.core.specifications.Spesifikasjon.Companion.regel
 
 class HarArbeidetSisteMnd(
         val month: Int
-) : Specification<Soknad>() {
-    override var description: () -> String = { "Har dokumentert sammenhengende arbeid siste $month mnd" }
-    override var identity: () -> String = { "FK_VK_10.x" }
-    override fun evaluate(søknad: Soknad): Evaluation {
-        return if (søknad.hovedsoker.mndArbeid >= month) Evaluation.ja("Person har jobbet ${søknad.hovedsoker.mndArbeid} måneder, som er tilstrekkelig", description(), identity())
-        else Evaluation.nei("Person er oppfort med ${søknad.hovedsoker.mndArbeid} mnd arbeid. Dekker ikke kravet til ${month} mnd med arbeid", description(), identity())
+) : Spesifikasjon<Soknad>() {
+    override var beskrivelse: () -> String = { "Har dokumentert sammenhengende arbeid siste $month mnd" }
+    override var identitet: () -> String = { "FK_VK_10.x" }
+    override fun evaluer(søknad: Soknad): Evaluering {
+        return if (søknad.hovedsoker.mndArbeid >= month) Evaluering.ja("Person har jobbet ${søknad.hovedsoker.mndArbeid} måneder, som er tilstrekkelig", beskrivelse(), identitet())
+        else Evaluering.nei("Person er oppfort med ${søknad.hovedsoker.mndArbeid} mnd arbeid. Dekker ikke kravet til ${month} mnd med arbeid", beskrivelse(), identitet())
     }
 }
 
 class HarRettTilForeldrePenger(
         val rolle: Rolle
 
-) : Specification<Soknad>() {
-    override var description: () -> String = { "Har søker med rolle $rolle rett til foreldrepenger?" }
-    override var identity: () -> String = { "FK_VK_10.1" }
-    override fun evaluate(søknad: Soknad): Evaluation {
+) : Spesifikasjon<Soknad>() {
+    override var beskrivelse: () -> String = { "Har søker med rolle $rolle rett til foreldrepenger?" }
+    override var identitet: () -> String = { "FK_VK_10.1" }
+    override fun evaluer(søknad: Soknad): Evaluering {
         val sokerIRolle = søknad.hentSøkerIRolle(rolle)
         return when {
-            sokerIRolle == null -> nei("Ingen søker med rolle $rolle", description(), identity())
-            !sokerIRolle.rettTilFp -> nei("Søker med rolle $rolle har ikke rett til foreldrepenger", description(), identity())
-            else -> ja("Søker med rolle $rolle har rett til foreldrepenger", description(), identity())
+            sokerIRolle == null -> nei("Ingen søker med rolle $rolle", beskrivelse(), identitet())
+            !sokerIRolle.rettTilFp -> nei("Søker med rolle $rolle har ikke rett til foreldrepenger", beskrivelse(), identitet())
+            else -> ja("Søker med rolle $rolle har rett til foreldrepenger", beskrivelse(), identitet())
         }
     }
 }
@@ -37,79 +37,79 @@ class HarRettTilForeldrePenger(
 class HarUttaksplanForModreKvote(
         val soknadstype: Soknadstype,
         val uttaksplan: Uttaksplan
-) : Specification<Soknad>() {
-    override var description: () -> String = { "" }
-    override var identity: () -> String = { "FK_VK 10.4/FK_VK 10.5/FK_VK 10.6" }
-    override fun evaluate(søknad: Soknad): Evaluation {
+) : Spesifikasjon<Soknad>() {
+    override var beskrivelse: () -> String = { "" }
+    override var identitet: () -> String = { "FK_VK 10.4/FK_VK 10.5/FK_VK 10.6" }
+    override fun evaluer(søknad: Soknad): Evaluering {
         val mor = søknad.hentSøkerIRolle(Rolle.MOR)
         return when {
-            mor == null -> nei("Ingen søker med rolle ${Rolle.MOR}", description(), identity())
-            mor.uttaksplan == null -> nei("Det foreligger ingen uttaksplan for ${Rolle.MOR}", description(), identity())
-            uttaksplan == mor.uttaksplan -> ja("Mødrekvote tas ${uttaksplan.description}", description(), identity())
-            else -> nei("Mødrekvote tas ikke ${uttaksplan.description} $soknadstype", description(), identity())
+            mor == null -> nei("Ingen søker med rolle ${Rolle.MOR}", beskrivelse(), identitet())
+            mor.uttaksplan == null -> nei("Det foreligger ingen uttaksplan for ${Rolle.MOR}", beskrivelse(), identitet())
+            uttaksplan == mor.uttaksplan -> ja("Mødrekvote tas ${uttaksplan.description}", beskrivelse(), identitet())
+            else -> nei("Mødrekvote tas ikke ${uttaksplan.description} $soknadstype", beskrivelse(), identitet())
         }
     }
 }
 
 class SoknadGjelder(
         val soknadstype: Soknadstype
-) : Specification<Soknad>() {
-    override var description: () -> String = { "Soknad gjelder $soknadstype" }
-    override var identity: () -> String = { "SoknadGjelder" }
-    override fun evaluate(søknad: Soknad): Evaluation {
+) : Spesifikasjon<Soknad>() {
+    override var beskrivelse: () -> String = { "Soknad gjelder $soknadstype" }
+    override var identitet: () -> String = { "SoknadGjelder" }
+    override fun evaluer(søknad: Soknad): Evaluering {
         return when (soknadstype) {
-            søknad.soknadstype -> ja("Søknad gjelder $soknadstype", description(), identity())
-            else -> nei("Søknad gjelder ikke $soknadstype", description(), identity())
+            søknad.soknadstype -> ja("Søknad gjelder $soknadstype", beskrivelse(), identitet())
+            else -> nei("Søknad gjelder ikke $soknadstype", beskrivelse(), identitet())
         }
     }
 }
 
 class Regelsett {
 
-    private val harBeggeForeldreRettTilForeldrePenger = rule(
-            spec = HarRettTilForeldrePenger(Rolle.MOR).and(HarRettTilForeldrePenger(Rolle.FAR)),
-            identity = "FK_VK_10.1",
-            description = "Har begge foreldre rett til foreldrepenger?")
+    private val harBeggeForeldreRettTilForeldrePenger = regel(
+            spec = HarRettTilForeldrePenger(Rolle.MOR).og(HarRettTilForeldrePenger(Rolle.FAR)),
+            identitet = "FK_VK_10.1",
+            beskrivelse = "Har begge foreldre rett til foreldrepenger?")
 
-    private val gjelderSoknadFødsel = rule(
+    private val gjelderSoknadFødsel = regel(
             spec = SoknadGjelder(Soknadstype.FODSEL),
-            identity = "FK_VK 10.2",
-            description = "Gjelder søknad fødsel?"
+            identitet = "FK_VK 10.2",
+            beskrivelse = "Gjelder søknad fødsel?"
     )
-    private val gjelderSoknadAdopsjon = rule(
+    private val gjelderSoknadAdopsjon = regel(
             spec = SoknadGjelder(Soknadstype.ADOPSJON),
-            identity = "FK_VK 10.3",
-            description = "Gjelder søknad adopsjon?"
+            identitet = "FK_VK 10.3",
+            beskrivelse = "Gjelder søknad adopsjon?"
     )
-    private val harUttaksplanEtterFodsel = rule(
+    private val harUttaksplanEtterFodsel = regel(
             spec = HarUttaksplanForModreKvote(
                     soknadstype = Soknadstype.FODSEL,
                     uttaksplan = Uttaksplan.SAMMENHENGENDE),
-            identity = "FK_VK_10.4",
-            description = "Har mor uttaksplan sammenhengende or tre år etter fødsel?"
+            identitet = "FK_VK_10.4",
+            beskrivelse = "Har mor uttaksplan sammenhengende eller tre år etter fødsel?"
     )
-    private val harUttaksplanEtterAdopsjon = rule(
+    private val harUttaksplanEtterAdopsjon = regel(
             spec = HarUttaksplanForModreKvote(
                     soknadstype = Soknadstype.ADOPSJON,
                     uttaksplan = Uttaksplan.INNEN_3_AAR),
-            identity = "FK_VK_10.5",
-            description = "Har mor uttaksplan sammenhengende or tre år etter adopsjon?"
+            identitet = "FK_VK_10.5",
+            beskrivelse = "Har mor uttaksplan sammenhengende eller tre år etter adopsjon?"
     )
-    private val vilkårForFødsel = rule(
-            spec = harBeggeForeldreRettTilForeldrePenger.and(gjelderSoknadFødsel).and(harUttaksplanEtterFodsel),
-            identity = "FK_VK.10.A",
-            description = ""
+    private val vilkårForFødsel = regel(
+            spec = harBeggeForeldreRettTilForeldrePenger.og(gjelderSoknadFødsel).og(harUttaksplanEtterFodsel),
+            identitet = "FK_VK.10.A",
+            beskrivelse = ""
     )
-    private val vilkårForAdopsjon = rule(
+    private val vilkårForAdopsjon = regel(
             spec = harBeggeForeldreRettTilForeldrePenger
-                    .and(rule(spec = not(gjelderSoknadFødsel), description = "søknad gjelder ikke fødsel", identity = ""))
-                    .and(gjelderSoknadAdopsjon)
-                    .and(harUttaksplanEtterAdopsjon),
-            identity = "FK_VK.10.B",
-            description = "")
+                    .og(regel(spec = ikke(gjelderSoknadFødsel), beskrivelse = "søknad gjelder ikke fødsel", identitet = ""))
+                    .og(gjelderSoknadAdopsjon)
+                    .og(harUttaksplanEtterAdopsjon),
+            identitet = "FK_VK.10.B",
+            beskrivelse = "")
 
-    val mødreKvote = rule(
-            spec = vilkårForAdopsjon.or(vilkårForFødsel),
-            identity = "FK_VK.10",
-            description = "Er vilkår for mødrekvote oppfylt for enten fødsel or adopsjon?")
+    val mødreKvote = regel(
+            spec = vilkårForAdopsjon.eller(vilkårForFødsel),
+            identitet = "FK_VK.10",
+            beskrivelse = "Er vilkår for mødrekvote oppfylt for enten fødsel eller adopsjon?")
 }
