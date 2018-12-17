@@ -74,27 +74,23 @@ class Regelsett {
     private val gjelderSoknadFødsel = regel(
             spec = SoknadGjelder(Soknadstype.FODSEL),
             identitet = "FK_VK 10.2",
-            beskrivelse = "Gjelder søknad fødsel?"
-            specification = SoknadGjelder(soknadstype = Soknadstype.FODSEL))
+            beskrivelse = "Gjelder søknad fødsel?")
     private val gjelderSoknadAdopsjon = regel(
             spec = SoknadGjelder(Soknadstype.ADOPSJON),
             identitet = "FK_VK 10.3",
-            beskrivelse = "Gjelder søknad adopsjon?"
-            specification = SoknadGjelder(Soknadstype.ADOPSJON))
+            beskrivelse = "Gjelder søknad adopsjon?")
     private val harUttaksplanEtterFodsel = regel(
             spec = HarUttaksplanForModreKvote(
                     soknadstype = Soknadstype.FODSEL,
                     uttaksplan = Uttaksplan.SAMMENHENGENDE),
             identitet = "FK_VK_10.4",
-            beskrivelse = "Har mor uttaksplan sammenhengende eller tre år etter fødsel?"
-            specification = HarUttaksplanForModreKvote(
+            beskrivelse = "Har mor uttaksplan sammenhengende eller tre år etter fødsel?")
     private val harUttaksplanEtterAdopsjon = regel(
             spec = HarUttaksplanForModreKvote(
                     soknadstype = Soknadstype.ADOPSJON,
                     uttaksplan = Uttaksplan.INNEN_3_AAR),
             identitet = "FK_VK_10.5",
-            beskrivelse = "Har mor uttaksplan sammenhengende eller tre år etter adopsjon?"
-            specification = HarUttaksplanForModreKvote(
+            beskrivelse = "Har mor uttaksplan sammenhengende eller tre år etter adopsjon?")
     private val vilkårForFødsel = regel(
             spec = harBeggeForeldreRettTilForeldrePenger.og(gjelderSoknadFødsel).og(harUttaksplanEtterFodsel),
             identitet = "FK_VK.10.A",
@@ -112,5 +108,4 @@ class Regelsett {
             spec = vilkårForAdopsjon.eller(vilkårForFødsel),
             identitet = "FK_VK.10",
             beskrivelse = "Er vilkår for mødrekvote oppfylt for enten fødsel eller adopsjon?")
-    )
 }
