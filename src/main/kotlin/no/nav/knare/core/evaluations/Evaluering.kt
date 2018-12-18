@@ -47,7 +47,7 @@ data class Evaluering(val resultat: Resultat,
                 beskrivelse = "IKKE ${that.beskrivelse}",
                 identitet = "IKKE (${that.identitet})",
                 operatør = Operatør.IKKE,
-                children = emptyList()
+                children = listOf(that)
         )
     }
 }

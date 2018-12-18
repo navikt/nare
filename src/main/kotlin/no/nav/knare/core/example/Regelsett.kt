@@ -80,9 +80,7 @@ class Regelsett {
             identitet = "FK_VK 10.3",
             beskrivelse = "Gjelder søknad adopsjon?")
     private val harUttaksplanEtterFodsel = regel(
-            spec = HarUttaksplanForModreKvote(
-                    soknadstype = Soknadstype.FODSEL,
-                    uttaksplan = Uttaksplan.SAMMENHENGENDE),
+            spec = HarUttaksplanForModreKvote(Soknadstype.FODSEL, Uttaksplan.SAMMENHENGENDE) eller HarUttaksplanForModreKvote(Soknadstype.FODSEL, Uttaksplan.INNEN_3_AAR),
             identitet = "FK_VK_10.4",
             beskrivelse = "Har mor uttaksplan sammenhengende eller tre år etter fødsel?")
     private val harUttaksplanEtterAdopsjon = regel(
@@ -96,10 +94,8 @@ class Regelsett {
             identitet = "FK_VK.10.A",
             beskrivelse = "Vilkår for foreldrepenger ved fødsel"
     )
-
-    private val gjelderIkkeFødsel = regel(spec = ikke(gjelderSoknadFødsel), beskrivelse = "søknad gjelder ikke fødsel", identitet = "")
     private val vilkårForAdopsjon = regel(
-            spec = harBeggeForeldreRettTilForeldrePenger og gjelderIkkeFødsel og gjelderSoknadAdopsjon og harUttaksplanEtterAdopsjon,
+            spec = harBeggeForeldreRettTilForeldrePenger og ikke(gjelderSoknadFødsel) og gjelderSoknadAdopsjon og harUttaksplanEtterAdopsjon,
             identitet = "FK_VK.10.B",
             beskrivelse = "Vilkår for foreldrepenger ved adopsjon")
 
