@@ -67,7 +67,7 @@ class SoknadGjelder(
 class Regelsett {
 
     private val harBeggeForeldreRettTilForeldrePenger = regel(
-            spec = HarRettTilForeldrePenger(Rolle.MOR).og(HarRettTilForeldrePenger(Rolle.FAR)),
+            spec = HarRettTilForeldrePenger(Rolle.MOR) og HarRettTilForeldrePenger(Rolle.FAR),
             identitet = "FK_VK_10.1",
             beskrivelse = "Har begge foreldre rett til foreldrepenger?")
 
@@ -92,20 +92,19 @@ class Regelsett {
             identitet = "FK_VK_10.5",
             beskrivelse = "Har mor uttaksplan sammenhengende eller tre år etter adopsjon?")
     private val vilkårForFødsel = regel(
-            spec = harBeggeForeldreRettTilForeldrePenger.og(gjelderSoknadFødsel).og(harUttaksplanEtterFodsel),
+            spec = harBeggeForeldreRettTilForeldrePenger og gjelderSoknadFødsel og harUttaksplanEtterFodsel,
             identitet = "FK_VK.10.A",
             beskrivelse = ""
     )
+
+    private val gjelderIkkeFødsel = regel(spec = ikke(gjelderSoknadFødsel), beskrivelse = "søknad gjelder ikke fødsel", identitet = "")
     private val vilkårForAdopsjon = regel(
-            spec = harBeggeForeldreRettTilForeldrePenger
-                    .og(regel(spec = ikke(gjelderSoknadFødsel), beskrivelse = "søknad gjelder ikke fødsel", identitet = ""))
-                    .og(gjelderSoknadAdopsjon)
-                    .og(harUttaksplanEtterAdopsjon),
+            spec = harBeggeForeldreRettTilForeldrePenger og gjelderIkkeFødsel og gjelderSoknadAdopsjon og harUttaksplanEtterAdopsjon,
             identitet = "FK_VK.10.B",
             beskrivelse = "")
 
     val mødreKvote = regel(
-            spec = vilkårForAdopsjon.eller(vilkårForFødsel),
+            spec = vilkårForAdopsjon eller vilkårForFødsel,
             identitet = "FK_VK.10",
             beskrivelse = "Er vilkår for mødrekvote oppfylt for enten fødsel eller adopsjon?")
 }

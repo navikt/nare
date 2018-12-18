@@ -11,11 +11,11 @@ abstract class Spesifikasjon<T> {
     open var identitet: () -> String = { "default identitet" }
     abstract fun evaluer(t: T): Evaluering
 
-    fun og(right: Spesifikasjon<T>): Spesifikasjon<T> {
+    infix fun og(right: Spesifikasjon<T>): Spesifikasjon<T> {
         return OgSpesifikasjon(left = this, right = right)
     }
 
-    fun eller(right: Spesifikasjon<T>): Spesifikasjon<T> {
+    infix fun eller(right: Spesifikasjon<T>): Spesifikasjon<T> {
         return EllerSpesifikasjon(left = this, right = right)
     }
 
