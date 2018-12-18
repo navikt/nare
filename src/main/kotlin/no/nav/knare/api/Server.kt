@@ -9,7 +9,7 @@ import spark.Spark.*
 fun main(args: Array<String>) {
     val gson = Gson()
     port(1338)
-    staticFiles.location("/public")
+    staticFiles.location("/public/")
     get("/api/vurdering/modrekvote", { _: Request, _: Response -> Regelsett().mødreKvote.evaluer(dummySoknad) }, {gson.toJson(it)})
 
 }

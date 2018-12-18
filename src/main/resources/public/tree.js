@@ -23,7 +23,7 @@ var svg = d3.select("body").append("svg")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 // load the external data
-d3.json("/api/vurdering/kanskjekvote", function (error, root) {
+d3.json("/api/vurdering/modrekvote", function (error, root) {
     update(root);
 });
 
@@ -31,10 +31,10 @@ var tip = d3.tip()
     .attr('class', 'd3-tip')
     .offset([-10, 0])
     .html(function(d) {
-        return "<div> ID: <span style='color:lightblue'>"+ d.ruleIdentification+"</span></div> " +
-            "<div> Beskrivelse: <div style='color:lightblue'>"+ d.ruleDescription+"</span></div> " +
-            "<div> Evaluering: <div style='color:lightblue'>"+ d.reason+"</div></div>";
-    })
+        return "<div> ID: <span style='color:lightblue'>"+ d.identitet+"</span></div> " +
+            "<div> Beskrivelse: <div style='color:lightblue'>"+ d.beskrivelse+"</span></div> " +
+            "<div> Evaluering: <div style='color:lightblue'>"+ d.årsak+"</div></div>";
+    });
 
 svg.call(tip);
 
@@ -64,12 +64,12 @@ function update(source) {
 
 
     function getType(d) {
-        switch (d.operator) {
-            case "AND" :
+        switch (d.operatør) {
+            case "OG" :
                 return "square";
-            case "OR" :
+            case "ELLER" :
                 return "cross";
-            case "NOT" :
+            case "IKKE" :
                 return "diamond";
             default:
                 return "circle";
@@ -83,25 +83,25 @@ function update(source) {
         .on('mouseover', tip.show)
         .on('mouseout', tip.hide)
         .attr("class", function(d){
-            switch (d.result){
-                case "YES": return "nodeYes"
-                case "NO" : return "nodeNo"
-                case "MAYBE": return "nodeMaybe"
+            switch (d.resultat){
+                case "JA": return "nodeYes";
+                case "NEI" : return "nodeNo";
+                case "KANSKJE": return "nodeMaybe";
             }
-        })
+        });
 
 
 
     nodeEnter.append("text")
         .attr("x", function (d) {
-            return d.children ? -20 : 20;
+            return d.children? -20 : 20;
         })
         .attr("dy", ".35em")
         .attr("text-anchor", function (d) {
             return d.children  ? "end" : "start";
         })
         .text(function (d) {
-            return d.children ? "" : d.reason;
+            return d.children ? "" : d.årsak;
         })
         .style("fill", "#BEBEBE");
 
@@ -109,12 +109,12 @@ function update(source) {
         .attr("dy", "0.35em")
         .attr("text-anchor", "middle")
         .text(function (d) {
-            return d.result;
+            return d.resultat;
         })
         .on('mouseover', tip.show)
         .on('mouseout', tip.hide)
         .style("fill", "#212121")
-        .style("font-weight","bold")
+        .style("font-weight","bold");
 
     // Declare the links…
     var link = svg.selectAll("path.link")
@@ -125,13 +125,12 @@ function update(source) {
     // Enter the links.
     link.enter().insert("path", "g")
         .attr("class", function(d){
-            switch (d.target.result){
-                case "YES": return "linkYes"
-                case "NO" : return "linkNo"
-                case "MAYBE": return "linkMaybe"
+            switch (d.target.resultat){
+                case "JA": return "linkYes";
+                case "NEI" : return "linkNo";
+                case "KANSKJE": return "linkMaybe";
             }
         })
         .attr("d", diagonal);
-
 
 }

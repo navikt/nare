@@ -1,22 +1,22 @@
 package no.nav.knare.core.evaluations
 
 enum class Resultat {
-    YES {
+    JA {
         override fun and(other: Resultat): Resultat = other
-        override fun or(other: Resultat): Resultat = YES
-        override fun not(): Resultat = NO
+        override fun or(other: Resultat): Resultat = JA
+        override fun not(): Resultat = NEI
     },
 
-    NO {
-        override fun and(other: Resultat): Resultat = NO
+    NEI {
+        override fun and(other: Resultat): Resultat = NEI
         override fun or(other: Resultat): Resultat = other
-        override fun not(): Resultat = YES
+        override fun not(): Resultat = JA
     },
 
-    MAYBE {
-        override fun and(other: Resultat): Resultat = if (other == YES) MAYBE else other
-        override fun or(other: Resultat): Resultat = if (other == NO) MAYBE else other
-        override fun not(): Resultat = MAYBE
+    KANSKJE {
+        override fun and(other: Resultat): Resultat = if (other == JA) KANSKJE else other
+        override fun or(other: Resultat): Resultat = if (other == NEI) KANSKJE else other
+        override fun not(): Resultat = KANSKJE
     };
 
     abstract fun and(other: Resultat): Resultat

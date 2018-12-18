@@ -8,32 +8,32 @@ class ResultTest {
     @Test
     fun allPermutations() {
         // og
-        assertThat(YES.and(YES)).isEqualTo(YES)
-        assertThat(YES.and(NO)).isEqualTo(NO)
-        assertThat(NO.and(YES)).isEqualTo(NO)
-        assertThat(NO.and(NO)).isEqualTo(NO)
+        assertThat(JA.and(JA)).isEqualTo(JA)
+        assertThat(JA.and(NEI)).isEqualTo(NEI)
+        assertThat(NEI.and(JA)).isEqualTo(NEI)
+        assertThat(NEI.and(NEI)).isEqualTo(NEI)
 
-        assertThat(YES.and(MAYBE)).isEqualTo(MAYBE)
-        assertThat(NO.and(MAYBE)).isEqualTo(NO)
-        assertThat(MAYBE.and(MAYBE)).isEqualTo(MAYBE)
-        assertThat(MAYBE.and(YES)).isEqualTo(MAYBE)
-        assertThat(MAYBE.and(NO)).isEqualTo(NO)
+        assertThat(JA.and(KANSKJE)).isEqualTo(KANSKJE)
+        assertThat(NEI.and(KANSKJE)).isEqualTo(NEI)
+        assertThat(KANSKJE.and(KANSKJE)).isEqualTo(KANSKJE)
+        assertThat(KANSKJE.and(JA)).isEqualTo(KANSKJE)
+        assertThat(KANSKJE.and(NEI)).isEqualTo(NEI)
 
         // eller
-        assertThat(YES.or(YES)).isEqualTo(YES)
-        assertThat(YES.or(NO)).isEqualTo(YES)
-        assertThat(NO.or(YES)).isEqualTo(YES)
-        assertThat(NO.or(NO)).isEqualTo(NO)
+        assertThat(JA.or(JA)).isEqualTo(JA)
+        assertThat(JA.or(NEI)).isEqualTo(JA)
+        assertThat(NEI.or(JA)).isEqualTo(JA)
+        assertThat(NEI.or(NEI)).isEqualTo(NEI)
 
-        assertThat(YES.or(MAYBE)).isEqualTo(YES)
-        assertThat(NO.or(MAYBE)).isEqualTo(MAYBE)
-        assertThat(MAYBE.or(MAYBE)).isEqualTo(MAYBE)
-        assertThat(MAYBE.or(YES)).isEqualTo(YES)
-        assertThat(MAYBE.or(NO)).isEqualTo(MAYBE)
+        assertThat(JA.or(KANSKJE)).isEqualTo(JA)
+        assertThat(NEI.or(KANSKJE)).isEqualTo(KANSKJE)
+        assertThat(KANSKJE.or(KANSKJE)).isEqualTo(KANSKJE)
+        assertThat(KANSKJE.or(JA)).isEqualTo(JA)
+        assertThat(KANSKJE.or(NEI)).isEqualTo(KANSKJE)
 
         // ikke
-        assertThat(YES.not()).isEqualTo(NO)
-        assertThat(NO.not()).isEqualTo(YES)
-        assertThat(MAYBE.not()).isEqualTo(MAYBE)
+        assertThat(JA.not()).isEqualTo(NEI)
+        assertThat(NEI.not()).isEqualTo(JA)
+        assertThat(KANSKJE.not()).isEqualTo(KANSKJE)
     }
 }
