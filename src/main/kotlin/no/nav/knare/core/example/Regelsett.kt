@@ -94,14 +94,14 @@ class Regelsett {
     private val vilkårForFødsel = regel(
             spec = harBeggeForeldreRettTilForeldrePenger og gjelderSoknadFødsel og harUttaksplanEtterFodsel,
             identitet = "FK_VK.10.A",
-            beskrivelse = ""
+            beskrivelse = "Vilkår for foreldrepenger ved fødsel"
     )
 
     private val gjelderIkkeFødsel = regel(spec = ikke(gjelderSoknadFødsel), beskrivelse = "søknad gjelder ikke fødsel", identitet = "")
     private val vilkårForAdopsjon = regel(
             spec = harBeggeForeldreRettTilForeldrePenger og gjelderIkkeFødsel og gjelderSoknadAdopsjon og harUttaksplanEtterAdopsjon,
             identitet = "FK_VK.10.B",
-            beskrivelse = "")
+            beskrivelse = "Vilkår for foreldrepenger ved adopsjon")
 
     val mødreKvote = regel(
             spec = vilkårForAdopsjon eller vilkårForFødsel,

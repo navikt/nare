@@ -24,25 +24,25 @@ data class Evaluering(val resultat: Resultat,
 
         fun og(left: Evaluering, right: Evaluering) = Evaluering(
                 resultat = left.resultat.and(right.resultat),
-                årsak = "${left.årsak} AND ${right.årsak}",
-                beskrivelse = "${left.beskrivelse ?: "no beskrivelse"} AND ${right.beskrivelse ?: "no beskrivelse"}",
-                identitet = "${left.identitet} AND ${right.identitet}",
+                årsak = "${left.årsak} OG ${right.årsak}",
+                beskrivelse = "${left.beskrivelse ?: "no beskrivelse"} OG ${right.beskrivelse ?: "no beskrivelse"}",
+                identitet = "${left.identitet} OG ${right.identitet}",
                 barn = listOf(left, right)
         )
 
         fun eller(left: Evaluering, right: Evaluering) = Evaluering(
                 resultat = left.resultat.or(right.resultat),
-                årsak = "${left.årsak} OR ${right.årsak}",
-                beskrivelse = "${left.beskrivelse ?: "no beskrivelse"} OR ${right.beskrivelse ?: "no beskrivelse"}",
-                identitet = "${left.identitet} OR ${right.identitet}",
+                årsak = "${left.årsak} ELLER ${right.årsak}",
+                beskrivelse = "${left.beskrivelse ?: "no beskrivelse"} ELLER ${right.beskrivelse ?: "no beskrivelse"}",
+                identitet = "${left.identitet} ELLER ${right.identitet}",
                 barn = listOf(left, right)
         )
 
         fun ikke(that: Evaluering) = Evaluering(
                 resultat = that.resultat.not(),
-                årsak = "NOT ${that.årsak}",
-                beskrivelse = "NOT ${that.beskrivelse}",
-                identitet = "NOT (${that.identitet})",
+                årsak = "IKKE ${that.årsak}",
+                beskrivelse = "IKKE ${that.beskrivelse}",
+                identitet = "IKKE (${that.identitet})",
                 barn = emptyList()
         )
     }
