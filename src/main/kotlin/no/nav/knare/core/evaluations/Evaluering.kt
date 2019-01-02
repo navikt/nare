@@ -14,9 +14,6 @@ data class Evaluering(val resultat: Resultat,
         fun nei(reason: String, description: String, identification: String) =
                 Evaluering(Resultat.NEI, reason, description, identification, Operatør.INGEN, emptyList())
 
-        fun kanskje(reason: String, description: String, identification: String) =
-                Evaluering(Resultat.KANSKJE, reason, description, identification, Operatør.INGEN, emptyList())
-
         fun evaluering(beskrivelse: String = "", identitet: String = "", evaluering: Evaluering): Evaluering {
             evaluering.beskrivelse = beskrivelse
             evaluering.identitet = identitet
@@ -24,18 +21,18 @@ data class Evaluering(val resultat: Resultat,
         }
 
         fun og(left: Evaluering, right: Evaluering) = Evaluering(
-                resultat = left.resultat.and(right.resultat),
+                resultat = left.resultat and right.resultat,
                 årsak = "${left.årsak} OG ${right.årsak}",
-                beskrivelse = "${left.beskrivelse ?: "no beskrivelse"} OG ${right.beskrivelse ?: "no beskrivelse"}",
+                beskrivelse = "${left.beskrivelse ?: "no beskrivelse"} OG ${right.beskrivelse ?: "ingen beskrivelse"}",
                 identitet = "${left.identitet} OG ${right.identitet}",
                 operatør = Operatør.OG,
                 children = listOf(left, right)
         )
 
         fun eller(left: Evaluering, right: Evaluering) = Evaluering(
-                resultat = left.resultat.or(right.resultat),
+                resultat = left.resultat or right.resultat,
                 årsak = "${left.årsak} ELLER ${right.årsak}",
-                beskrivelse = "${left.beskrivelse ?: "no beskrivelse"} ELLER ${right.beskrivelse ?: "no beskrivelse"}",
+                beskrivelse = "${left.beskrivelse ?: "no beskrivelse"} ELLER ${right.beskrivelse ?: "ingen beskrivelse"}",
                 identitet = "${left.identitet} ELLER ${right.identitet}",
                 operatør = Operatør.ELLER,
                 children = listOf(left, right)
