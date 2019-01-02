@@ -12,6 +12,8 @@ class HarArbeidetSisteMnd(
 ) : Spesifikasjon<Soknad>() {
     override var beskrivelse: () -> String = { "Har dokumentert sammenhengende arbeid siste $month mnd" }
     override var identitet: () -> String = { "FK_VK_10.x" }
+
+    @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE")
     override fun evaluer(søknad: Soknad): Evaluering {
         return if (søknad.hovedsoker.mndArbeid >= month) Evaluering.ja("Person har jobbet ${søknad.hovedsoker.mndArbeid} måneder, som er tilstrekkelig", beskrivelse(), identitet())
         else Evaluering.nei("Person er oppfort med ${søknad.hovedsoker.mndArbeid} mnd arbeid. Dekker ikke kravet til ${month} mnd med arbeid", beskrivelse(), identitet())
@@ -24,6 +26,8 @@ class HarRettTilForeldrePenger(
 ) : Spesifikasjon<Soknad>() {
     override var beskrivelse: () -> String = { "Har søker med rolle $rolle rett til foreldrepenger?" }
     override var identitet: () -> String = { "FK_VK_10.1" }
+
+    @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE")
     override fun evaluer(søknad: Soknad): Evaluering {
         val sokerIRolle = søknad.hentSøkerIRolle(rolle)
         return when {
@@ -40,6 +44,8 @@ class HarUttaksplanForModreKvote(
 ) : Spesifikasjon<Soknad>() {
     override var beskrivelse: () -> String = { "" }
     override var identitet: () -> String = { "FK_VK 10.4/FK_VK 10.5/FK_VK 10.6" }
+
+    @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE")
     override fun evaluer(søknad: Soknad): Evaluering {
         val mor = søknad.hentSøkerIRolle(Rolle.MOR)
         return when {
@@ -56,6 +62,8 @@ class SoknadGjelder(
 ) : Spesifikasjon<Soknad>() {
     override var beskrivelse: () -> String = { "Soknad gjelder $soknadstype" }
     override var identitet: () -> String = { "SoknadGjelder" }
+
+    @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE")
     override fun evaluer(søknad: Soknad): Evaluering {
         return when (soknadstype) {
             søknad.soknadstype -> ja("Søknad gjelder $soknadstype", beskrivelse(), identitet())
