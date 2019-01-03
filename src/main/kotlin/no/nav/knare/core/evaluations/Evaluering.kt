@@ -1,27 +1,27 @@
 package no.nav.knare.core.evaluations
 
-class Evaluering(
+data class Evaluering(
         val resultat: Resultat,
         val reason: String,
         val operatør: Operatør = Operatør.INGEN,
         var children: Collection<Evaluering>) {
 
     infix fun og(other: Evaluering) = Evaluering(
-            resultat = resultat and other.resultat,
+            resultat = resultat og other.resultat,
             reason = "$reason OG ${other.reason}",
             operatør = Operatør.OG,
             children = listOf(this, other)
     )
 
     infix fun eller(other: Evaluering) = Evaluering(
-            resultat = resultat or other.resultat,
+            resultat = resultat eller other.resultat,
             reason = "$reason ELLER ${other.reason}",
             operatør = Operatør.ELLER,
             children = listOf(this, other)
     )
 
     fun ikke() = Evaluering(
-            resultat = resultat.not(),
+            resultat = resultat.ikke(),
             reason = "IKKE $reason",
             operatør = Operatør.IKKE,
             children = listOf(this)

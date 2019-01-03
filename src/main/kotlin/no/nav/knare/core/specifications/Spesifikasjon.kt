@@ -2,7 +2,7 @@ package no.nav.knare.core.specifications
 
 import no.nav.knare.core.evaluations.*
 
-class Spesifikasjon (
+data class Spesifikasjon (
         val beskrivelse: String,
         val identitet: String,
         val children: List<Spesifikasjon> = emptyList(),

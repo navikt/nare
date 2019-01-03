@@ -2,24 +2,24 @@ package no.nav.knare.core.evaluations
 
 enum class Resultat {
     JA {
-        override infix fun and(other: Resultat): Resultat = other
-        override infix fun or(other: Resultat): Resultat = JA
-        override fun not(): Resultat = NEI
+        override infix fun og(other: Resultat): Resultat = other
+        override infix fun eller(other: Resultat): Resultat = JA
+        override fun ikke(): Resultat = NEI
     },
 
     NEI {
-        override infix fun and(other: Resultat): Resultat = NEI
-        override infix fun or(other: Resultat): Resultat = other
-        override fun not(): Resultat = JA
+        override infix fun og(other: Resultat): Resultat = NEI
+        override infix fun eller(other: Resultat): Resultat = other
+        override fun ikke(): Resultat = JA
     },
 
     KANSKJE {
-        override infix fun and(other: Resultat): Resultat = if (other == JA) KANSKJE else other
-        override infix fun or(other: Resultat): Resultat = if (other == NEI) KANSKJE else other
-        override fun not(): Resultat = KANSKJE
+        override infix fun og(other: Resultat): Resultat = if (other == JA) KANSKJE else other
+        override infix fun eller(other: Resultat): Resultat = if (other == NEI) KANSKJE else other
+        override fun ikke(): Resultat = KANSKJE
     };
 
-    abstract infix fun and(other: Resultat): Resultat
-    abstract infix fun or(other: Resultat): Resultat
-    abstract fun not(): Resultat
+    abstract infix fun og(other: Resultat): Resultat
+    abstract infix fun eller(other: Resultat): Resultat
+    abstract fun ikke(): Resultat
 }
