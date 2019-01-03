@@ -1,51 +1,36 @@
 package no.nav.knare.core.evaluations
 
-data class Evaluering(val resultat: Resultat,
-                      val årsak: String,
-                      var beskrivelse: String?,
-                      var identitet: String,
-                      var operatør: Operatør = Operatør.INGEN,
-                      var children: Collection<Evaluering>) {
+class Evaluering(
+        val resultat: Resultat,
+        val reason: String,
+        val operatør: Operatør = Operatør.INGEN,
+        var children: Collection<Evaluering>) {
+
+    infix fun og(other: Evaluering) = Evaluering(
+            resultat = resultat and other.resultat,
+            reason = "$reason OG ${other.reason}",
+            operatør = Operatør.OG,
+            children = listOf(this, other)
+    )
+
+    infix fun eller(other: Evaluering) = Evaluering(
+            resultat = resultat or other.resultat,
+            reason = "$reason ELLER ${other.reason}",
+            operatør = Operatør.ELLER,
+            children = listOf(this, other)
+    )
+
+    fun ikke() = Evaluering(
+            resultat = resultat.not(),
+            reason = "IKKE $reason",
+            operatør = Operatør.IKKE,
+            children = listOf(this)
+    )
 
     companion object {
-        fun ja(reason: String, description: String, identification: String) =
-                Evaluering(Resultat.JA, reason, description, identification, Operatør.INGEN, emptyList())
+        fun ja(reason: String) = Evaluering(Resultat.JA, reason, Operatør.INGEN, emptyList())
 
-        fun nei(reason: String, description: String, identification: String) =
-                Evaluering(Resultat.NEI, reason, description, identification, Operatør.INGEN, emptyList())
-
-        fun evaluering(beskrivelse: String = "", identitet: String = "", evaluering: Evaluering): Evaluering {
-            evaluering.beskrivelse = beskrivelse
-            evaluering.identitet = identitet
-            return evaluering
-        }
-
-        fun og(left: Evaluering, right: Evaluering) = Evaluering(
-                resultat = left.resultat and right.resultat,
-                årsak = "${left.årsak} OG ${right.årsak}",
-                beskrivelse = "${left.beskrivelse ?: "no beskrivelse"} OG ${right.beskrivelse ?: "ingen beskrivelse"}",
-                identitet = "${left.identitet} OG ${right.identitet}",
-                operatør = Operatør.OG,
-                children = listOf(left, right)
-        )
-
-        fun eller(left: Evaluering, right: Evaluering) = Evaluering(
-                resultat = left.resultat or right.resultat,
-                årsak = "${left.årsak} ELLER ${right.årsak}",
-                beskrivelse = "${left.beskrivelse ?: "no beskrivelse"} ELLER ${right.beskrivelse ?: "ingen beskrivelse"}",
-                identitet = "${left.identitet} ELLER ${right.identitet}",
-                operatør = Operatør.ELLER,
-                children = listOf(left, right)
-        )
-
-        fun ikke(that: Evaluering) = Evaluering(
-                resultat = that.resultat.not(),
-                årsak = "IKKE ${that.årsak}",
-                beskrivelse = "IKKE ${that.beskrivelse}",
-                identitet = "IKKE (${that.identitet})",
-                operatør = Operatør.IKKE,
-                children = listOf(that)
-        )
+        fun nei(reason: String) = Evaluering(Resultat.NEI, reason, Operatør.INGEN, emptyList())
     }
 }
 
