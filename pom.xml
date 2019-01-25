@@ -6,7 +6,7 @@
 
     <groupId>no.nav</groupId>
     <artifactId>knare</artifactId>
-    <version>2b4798d</version>
+    <version>94615b0</version>
     <properties>
         <kotlin.version>1.3.20</kotlin.version>
         <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
