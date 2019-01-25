@@ -2,38 +2,45 @@ package no.nav.knare.core.evaluations
 
 data class Evaluering(
         val resultat: Resultat,
-        val reason: String,
-        val operatør: Operatør = Operatør.INGEN,
-        var children: Collection<Evaluering>) {
+        val begrunnelse: String,
+        val beskrivelse: String ="",
+        val identifikator: String ="",
+        val operator: Operator = Operator.INGEN,
+        var children: List<Evaluering> = emptyList()) {
 
     infix fun og(other: Evaluering) = Evaluering(
             resultat = resultat og other.resultat,
-            reason = "$reason OG ${other.reason}",
-            operatør = Operatør.OG,
+            begrunnelse = "($begrunnelse OG ${other.begrunnelse})",
+            operator = Operator.OG,
             children = listOf(this, other)
     )
 
     infix fun eller(other: Evaluering) = Evaluering(
             resultat = resultat eller other.resultat,
-            reason = "$reason ELLER ${other.reason}",
-            operatør = Operatør.ELLER,
+            begrunnelse = "($begrunnelse ELLER ${other.begrunnelse})",
+            operator = Operator.ELLER,
             children = listOf(this, other)
     )
 
     fun ikke() = Evaluering(
             resultat = resultat.ikke(),
-            reason = "IKKE $reason",
-            operatør = Operatør.IKKE,
+            begrunnelse = "(IKKE $begrunnelse)",
+            operator = Operator.IKKE,
             children = listOf(this)
     )
 
     companion object {
-        fun ja(reason: String) = Evaluering(Resultat.JA, reason, Operatør.INGEN, emptyList())
+        fun ja(begrunnelse: String) = Evaluering(Resultat.JA, begrunnelse)
 
-        fun nei(reason: String) = Evaluering(Resultat.NEI, reason, Operatør.INGEN, emptyList())
+        fun nei(begrunnelse: String) = Evaluering(Resultat.NEI, begrunnelse)
+
+        fun evaluer(identitet: String, beskrivelse: String, eval: Evaluering) = eval.copy(beskrivelse = beskrivelse, identifikator = identitet)
     }
+
 }
 
-enum class Operatør {
+enum class Operator {
     OG, ELLER, IKKE, INGEN
 }
+
+

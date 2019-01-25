@@ -5,12 +5,12 @@ import org.junit.jupiter.api.Assertions.*
 
 class SpesifikasjonTest {
 
-    private val left = Spesifikasjon(
+    private val left = Spesifikasjon<String>(
             "left beskrivelse",
             "left identitet",
             emptyList()) { Evaluering.ja("yepp") }
 
-    private val right = Spesifikasjon(
+    private val right = Spesifikasjon<String>(
             "right beskrivelse",
             "right identitet",
             emptyList()) { Evaluering.nei("nope") }
@@ -21,7 +21,7 @@ class SpesifikasjonTest {
         assertEquals("left beskrivelse ELLER right beskrivelse", actual.beskrivelse)
         assertEquals("left identitet ELLER right identitet", actual.identitet)
         assertEquals(listOf(left, right), actual.children)
-        assertEquals(Resultat.JA, actual.implementasjon.invoke().resultat)
+        assertEquals(Resultat.JA, actual.implementasjon.invoke("").resultat)
     }
 
     @Test
@@ -30,7 +30,7 @@ class SpesifikasjonTest {
         assertEquals("left beskrivelse OG right beskrivelse", actual.beskrivelse)
         assertEquals("left identitet OG right identitet", actual.identitet)
         assertEquals(listOf(left, right), actual.children)
-        assertEquals(Resultat.NEI, actual.implementasjon.invoke().resultat)
+        assertEquals(Resultat.NEI, actual.implementasjon.invoke("").resultat)
     }
 
     @Test
@@ -39,6 +39,6 @@ class SpesifikasjonTest {
         assertEquals("IKKE left beskrivelse", actual.beskrivelse)
         assertEquals("IKKE left identitet", actual.identitet)
         assertEquals(listOf(left), actual.children)
-        assertEquals(Resultat.NEI, actual.implementasjon.invoke().resultat)
+        assertEquals(Resultat.NEI, actual.implementasjon.invoke("").resultat)
     }
 }
