@@ -25,7 +25,7 @@ public class Server {
         Person far = new Person("Far", Rolle.FAR, "X", 500000, 80, "Oslo", true);
         Person mor = new Person("Mor", Rolle.MOR, "Y", 600000, 24, "Oslo", true);
 
-        mor.setUttaksplan(Uttaksplan.SAMMENHENGENDE);
+        mor.setUttaksplan(Uttaksplan.INNEN_3_AAR);
         return Soknad.fodselSøknad(mor).medSøker(far);
     }
 
