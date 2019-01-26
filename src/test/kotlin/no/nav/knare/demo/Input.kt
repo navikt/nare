@@ -1,21 +1,20 @@
-
 package no.nav.knare.core.demo
 
 data class Soknad(val hovedsoker: Person,
                   val medsoker: Person?,
                   val name: String = "Familien",
                   val søknadstype: Soknadstype) {
-    fun hentSøkerIRolle(rolle: Rolle): Person? {
-        when (rolle) {
-            hovedsoker.rolle -> return hovedsoker
-            medsoker?.rolle -> return medsoker
-            else -> return null
-        }
-    }
+   fun hentSøkerIRolle(rolle: Rolle): Person? {
+      when (rolle) {
+         hovedsoker.rolle -> return hovedsoker
+         medsoker?.rolle -> return medsoker
+         else -> return null
+      }
+   }
 }
 
 enum class Soknadstype {
-    FODSEL, ADOPSJON
+   FODSEL, ADOPSJON
 }
 
 data class Person(val name: String,
@@ -28,12 +27,12 @@ data class Person(val name: String,
                   val mndArbeid: Int)
 
 enum class Uttaksplan(val description:String) {
-    SAMMENHENGENDE("sammenhengende etter"),
-    INNEN_3_AAR("innen 3 år etter"),
-    SENERE("senere enn 3 år etter")
+   SAMMENHENGENDE("sammenhengende etter"),
+   INNEN_3_AAR("innen 3 år etter"),
+   SENERE("senere enn 3 år etter")
 }
 
 enum class Rolle {
-    MOR, FAR
+   MOR, FAR
 }
 

@@ -1,37 +1,37 @@
 sudo: required
 language: java
 jdk:
-- openjdk11
+   - openjdk11
 before_install:
-- openssl aes-256-cbc -K $encrypted_0cae374807e3_key -iv $encrypted_0cae374807e3_iv
-  -in travis/helseci.key.enc -out travis/helseci.key -d
-- git clone https://github.com/navikt/github-apps-support.git
-- export PATH=`pwd`/github-apps-support/bin:$PATH
-- export GH_TOKEN=$(generate-installation-token.sh `generate-jwt.sh ./travis/helseci.key
-  $GITHUB_APP_ID`)
-- export COMMIT_SHORT=$(git rev-parse --short HEAD)
-- export ORIGINAL_COMMITTER=$(git log -1 --pretty=format:'%an <%ae>')
-- echo -e "machine github.com\n  login $GH_TOKEN" > ~/.netrc
-- rm "${JAVA_HOME}/lib/security/cacerts"
-- ln -s /etc/ssl/certs/java/cacerts "${JAVA_HOME}/lib/security/cacerts"
+   - openssl aes-256-cbc -K $encrypted_0cae374807e3_key -iv $encrypted_0cae374807e3_iv
+      -in travis/helseci.key.enc -out travis/helseci.key -d
+   - git clone https://github.com/navikt/github-apps-support.git
+   - export PATH=`pwd`/github-apps-support/bin:$PATH
+   - export GH_TOKEN=$(generate-installation-token.sh `generate-jwt.sh ./travis/helseci.key
+      $GITHUB_APP_ID`)
+   - export COMMIT_SHORT=$(git rev-parse --short HEAD)
+   - export ORIGINAL_COMMITTER=$(git log -1 --pretty=format:'%an <%ae>')
+   - echo -e "machine github.com\n  login $GH_TOKEN" > ~/.netrc
+   - rm "${JAVA_HOME}/lib/security/cacerts"
+   - ln -s /etc/ssl/certs/java/cacerts "${JAVA_HOME}/lib/security/cacerts"
 script:
-- "./mvnw versions:set -DnewVersion=$COMMIT_SHORT"
-- "./mvnw clean package"
-- |
-  set -e
-  if [ "${TRAVIS_PULL_REQUEST}" = "false" ] && [ "${TRAVIS_BRANCH}" = "master" ]; then
+   - "./mvnw versions:set -DnewVersion=$COMMIT_SHORT"
+   - "./mvnw clean package"
+   - |
+      set -e
+      if [ "${TRAVIS_PULL_REQUEST}" = "false" ] && [ "${TRAVIS_BRANCH}" = "master" ]; then
 
-    git config user.name team-helse[bot]
-    git config user.email team-helse[bot]@users.noreply.github.com
+        git config user.name team-helse[bot]
+        git config user.email team-helse[bot]@users.noreply.github.com
 
-    git add pom.xml
-    git commit -m "Bump version [skip ci]" -m "Caused by $TRAVIS_BUILD_WEB_URL" --author "$ORIGINAL_COMMITTER"
+        git add pom.xml
+        git commit -m "Bump version [skip ci]" -m "Caused by $TRAVIS_BUILD_WEB_URL" --author "$ORIGINAL_COMMITTER"
 
-    git push https://x-access-token:$GH_TOKEN@github.com/navikt/nare.git HEAD:master
-  fi
+        git push https://x-access-token:$GH_TOKEN@github.com/navikt/nare.git HEAD:master
+      fi
 env:
-  global:
-    secure: kyPnGl1zygrL1CY7aCfOAfPuTwsuadEr8UAyqGsRyqEizhjkVMz12hu6I5An3wwviM6RGppnl52P4Tx96gMKmUDjygHcNx+ci95eloucxQoKjQ1krEvpLmS9KbaGj9uVkqiFVlvfVTi0A3EL2nTn2Sf0p/dtEnao4U9gXpk151IodD+j8K98+okMeKwGVpRy9N0qJrHobdnvsCSRCKaNoAupg0VDmpCQSdycHbmblXUFAHnMHpp3VzkU1DwBKrOwOP4SuE+Dt0qY2Aa8dbfUOfYt5s90/pHxll33cWlfkcEqHRRrPwn8wPov5nYjf/EnMD+eHPK5MsN960LP0TyWn9CGyybxw7QLsQMyZhpggsSsF601hfxYlVQtiPAVvI8sLS7yPNN22QQbLG/pX0Df1hM0KQKcjPu8UesA4bBRukwZpJnSm+5sTYi6d9zM9WxjqA8+ABywVm6yHgbUrnhp3t8C3/ztQRJmmowJ/IkiPKCzTKBiZz5EsgwGuYyn414lfppNc9pdOYR06NVybAglce0J9NkvoUf7mI9C93R7TLNK53s1aIpt8FG3hm1UAFh354/uthR+FdloE80qiokvZCJcNLEjMBBFGsPby6FTZ6afI/J5MeNGeQlSWXva9i7nW0ebqLZVXTHMtiBAMJmgBDhMK/PWWYXTY04XlR9Eif0=
+   global:
+      secure: kyPnGl1zygrL1CY7aCfOAfPuTwsuadEr8UAyqGsRyqEizhjkVMz12hu6I5An3wwviM6RGppnl52P4Tx96gMKmUDjygHcNx+ci95eloucxQoKjQ1krEvpLmS9KbaGj9uVkqiFVlvfVTi0A3EL2nTn2Sf0p/dtEnao4U9gXpk151IodD+j8K98+okMeKwGVpRy9N0qJrHobdnvsCSRCKaNoAupg0VDmpCQSdycHbmblXUFAHnMHpp3VzkU1DwBKrOwOP4SuE+Dt0qY2Aa8dbfUOfYt5s90/pHxll33cWlfkcEqHRRrPwn8wPov5nYjf/EnMD+eHPK5MsN960LP0TyWn9CGyybxw7QLsQMyZhpggsSsF601hfxYlVQtiPAVvI8sLS7yPNN22QQbLG/pX0Df1hM0KQKcjPu8UesA4bBRukwZpJnSm+5sTYi6d9zM9WxjqA8+ABywVm6yHgbUrnhp3t8C3/ztQRJmmowJ/IkiPKCzTKBiZz5EsgwGuYyn414lfppNc9pdOYR06NVybAglce0J9NkvoUf7mI9C93R7TLNK53s1aIpt8FG3hm1UAFh354/uthR+FdloE80qiokvZCJcNLEjMBBFGsPby6FTZ6afI/J5MeNGeQlSWXva9i7nW0ebqLZVXTHMtiBAMJmgBDhMK/PWWYXTY04XlR9Eif0=
 notifications:
-  slack:
-    secure: gEvmvW+JVocmwTGuXRF8PNfg00ls2bZh9hzB6Q/YkXsVlw0pSymA6Fxkr0gLjitc7VBU/F8PyqiyLxaHLgjTcer7jEQLYY0ULT5tjX5QmU2+pGii91Xoba+n7mnYeK7ntI3qHB51KH6Hrd28F+D5CyzAyVYhkyEE06dV1qfgB0ipcwnREs8M00Neq688L9mU+uMgy9iHdTpo44wvy9tonRxv6qQYwgdoonPeXtMCwrn89ZqhrOG6fHoCmC0BB+P0eLl40wK03XQ5IIcGGspPdHfZr8dDkAHrJ0p33O9ybQJJ9Dro2ukHcZn/UM3yaZGEsOyvkjkKwAXYp2jjDeVqstFvI+hAvl3HtKSZ4SUsJUsVLU9OiXgwUKRk2hLMR7o4bcwcyvLa+8ydPoqUd7cNhOn0pf6j4HuIoi8LYgSaUQzzmaesnJqJCANavymC9RJ5QfxfdCVnn/G7kptnm9yWS2OvIljZbUPfTZxeNt+Q1Z/jSWozrNKdy4TGgGGtm82xagXC3fVcLV30zbSQfTiCLLpqYxJ2qHYBkxPWh56yrPwzv/j1yPw4CvLDnWW1J93roeHEN1hJ8OULUOdFi1FoV4vm9FiizElWcPeCJKlCPl336k2hnW8reGgXLF9nA/k9fbXujIkDucQXMivLzNgrxOHO5F/Qw4AfTKTZ3K/EAEo=
+   slack:
+      secure: gEvmvW+JVocmwTGuXRF8PNfg00ls2bZh9hzB6Q/YkXsVlw0pSymA6Fxkr0gLjitc7VBU/F8PyqiyLxaHLgjTcer7jEQLYY0ULT5tjX5QmU2+pGii91Xoba+n7mnYeK7ntI3qHB51KH6Hrd28F+D5CyzAyVYhkyEE06dV1qfgB0ipcwnREs8M00Neq688L9mU+uMgy9iHdTpo44wvy9tonRxv6qQYwgdoonPeXtMCwrn89ZqhrOG6fHoCmC0BB+P0eLl40wK03XQ5IIcGGspPdHfZr8dDkAHrJ0p33O9ybQJJ9Dro2ukHcZn/UM3yaZGEsOyvkjkKwAXYp2jjDeVqstFvI+hAvl3HtKSZ4SUsJUsVLU9OiXgwUKRk2hLMR7o4bcwcyvLa+8ydPoqUd7cNhOn0pf6j4HuIoi8LYgSaUQzzmaesnJqJCANavymC9RJ5QfxfdCVnn/G7kptnm9yWS2OvIljZbUPfTZxeNt+Q1Z/jSWozrNKdy4TGgGGtm82xagXC3fVcLV30zbSQfTiCLLpqYxJ2qHYBkxPWh56yrPwzv/j1yPw4CvLDnWW1J93roeHEN1hJ8OULUOdFi1FoV4vm9FiizElWcPeCJKlCPl336k2hnW8reGgXLF9nA/k9fbXujIkDucQXMivLzNgrxOHO5F/Qw4AfTKTZ3K/EAEo=
