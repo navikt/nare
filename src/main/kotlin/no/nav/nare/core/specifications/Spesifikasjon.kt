@@ -49,3 +49,5 @@ data class Spesifikasjon<T>(
 
    }
 }
+
+fun <T> ikke(spec: Spesifikasjon<T>) = spec.ikke()
