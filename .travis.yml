@@ -1,43 +1,43 @@
 sudo: required
 language: java
 jdk:
-   - openjdk11
+- openjdk11
 before_install:
-   - openssl aes-256-cbc -K $encrypted_0cae374807e3_key -iv $encrypted_0cae374807e3_iv
-      -in travis/codesigning.asc.enc -out travis/codesigning.asc -d
-   - openssl aes-256-cbc -K $encrypted_0cae374807e3_key -iv $encrypted_0cae374807e3_iv
-      -in travis/helseci.key.enc -out travis/helseci.key -d
-   - git clone https://github.com/navikt/github-apps-support.git
-   - export PATH=`pwd`/github-apps-support/bin:$PATH
-   - export GH_TOKEN=$(generate-installation-token.sh `generate-jwt.sh ./travis/helseci.key
-      $GITHUB_APP_ID`)
-   - export COMMIT_SHORT=$(git rev-parse --short HEAD)
-   - export ORIGINAL_COMMITTER=$(git log -1 --pretty=format:'%an <%ae>')
-   - echo -e "machine github.com\n  login $GH_TOKEN" > ~/.netrc
-   - rm "${JAVA_HOME}/lib/security/cacerts"
-   - ln -s /etc/ssl/certs/java/cacerts "${JAVA_HOME}/lib/security/cacerts"
+- openssl aes-256-cbc -K $encrypted_0cae374807e3_key -iv $encrypted_0cae374807e3_iv
+  -in travis/helseci.key.enc -out travis/helseci.key -d
+- openssl aes-256-cbc -K $encrypted_0cae374807e3_key -iv $encrypted_0cae374807e3_iv
+  -in travis/codesigning.asc.enc -out travis/codesigning.asc -d
+- git clone https://github.com/navikt/github-apps-support.git
+- export PATH=`pwd`/github-apps-support/bin:$PATH
+- export GH_TOKEN=$(generate-installation-token.sh `generate-jwt.sh ./travis/helseci.key
+  $GITHUB_APP_ID`)
+- export COMMIT_SHORT=$(git rev-parse --short HEAD)
+- export ORIGINAL_COMMITTER=$(git log -1 --pretty=format:'%an <%ae>')
+- echo -e "machine github.com\n  login $GH_TOKEN" > ~/.netrc
+- rm "${JAVA_HOME}/lib/security/cacerts"
+- ln -s /etc/ssl/certs/java/cacerts "${JAVA_HOME}/lib/security/cacerts"
 script:
-   - mvn clean install
-   - |
-      set -e
-      if [ "$TRAVIS_BRANCH" = 'master' ] && [ "$TRAVIS_PULL_REQUEST" == 'false' ]; then
-         echo "Importing GPG key into keyring"
-         gpg --fast-import travis/codesigning.asc
-         COMMIT=$(git rev-parse --short=12 HEAD)
-         VERSION="$COMMIT_SHORT"
-         echo "Setting version $VERSION"
-         mvn versions:set -DnewVersion="$VERSION"
-         mvn versions:commit
-         echo "Running release"
-         travis_wait 50 mvn -q --settings travis/settings.xml deploy -Prelease -DskipTests=true
-      fi
+- mvn clean install
+- |
+  set -e
+  if [ "$TRAVIS_BRANCH" = 'master' ] && [ "$TRAVIS_PULL_REQUEST" == 'false' ]; then
+     echo "Importing GPG key into keyring"
+     gpg --fast-import travis/codesigning.asc
+     COMMIT=$(git rev-parse --short=12 HEAD)
+     VERSION="$COMMIT_SHORT"
+     echo "Setting version $VERSION"
+     mvn versions:set -DnewVersion="$VERSION"
+     mvn versions:commit
+     echo "Running release"
+     travis_wait 50 mvn -q --settings travis/settings.xml deploy -Prelease -DskipTests=true
+  fi
 env:
-   global:
-      - secure: kyPnGl1zygrL1CY7aCfOAfPuTwsuadEr8UAyqGsRyqEizhjkVMz12hu6I5An3wwviM6RGppnl52P4Tx96gMKmUDjygHcNx+ci95eloucxQoKjQ1krEvpLmS9KbaGj9uVkqiFVlvfVTi0A3EL2nTn2Sf0p/dtEnao4U9gXpk151IodD+j8K98+okMeKwGVpRy9N0qJrHobdnvsCSRCKaNoAupg0VDmpCQSdycHbmblXUFAHnMHpp3VzkU1DwBKrOwOP4SuE+Dt0qY2Aa8dbfUOfYt5s90/pHxll33cWlfkcEqHRRrPwn8wPov5nYjf/EnMD+eHPK5MsN960LP0TyWn9CGyybxw7QLsQMyZhpggsSsF601hfxYlVQtiPAVvI8sLS7yPNN22QQbLG/pX0Df1hM0KQKcjPu8UesA4bBRukwZpJnSm+5sTYi6d9zM9WxjqA8+ABywVm6yHgbUrnhp3t8C3/ztQRJmmowJ/IkiPKCzTKBiZz5EsgwGuYyn414lfppNc9pdOYR06NVybAglce0J9NkvoUf7mI9C93R7TLNK53s1aIpt8FG3hm1UAFh354/uthR+FdloE80qiokvZCJcNLEjMBBFGsPby6FTZ6afI/J5MeNGeQlSWXva9i7nW0ebqLZVXTHMtiBAMJmgBDhMK/PWWYXTY04XlR9Eif0=
-      - secure: FEsIlM11s2HCCNhvI9ysmItDkhdbhzmYAbW3HOMWDWH6gQIix19rjEYJe98OaQ9Sx7YS4Y3Rr6pMPT42d0jvZt7tHvlv6GaUkJ4oR86QjS0cKJO/QZA+PwL9dGHn85KMYEL9wk7T7mDgQxFCTb2H8WUpeMhWUQxPQf27zWziTBrpd00FCbNtDc2S/1zn45olPSC43J5Ap1+O0OHxQglYTqiq+UbzVfKyEnPdSskUrKYr9do62UCKMecfjS+FE7OEB44WSxVwl6aGGVhPVo1hGolBHXiRNGEw+IGvBua/SVj86NI11vi3PkyM58RiDmfrr7aVlTskRn3/O3GOGoIAKUTP2veYNgeJoJ5pFYWqrNqp6YieTPtBWWVFge4LthTvzQ/S8BAP6QoGLlagnHzpBpiVf7bvS3fPfraYevv9fZ65NKic8m1fLjj+u23kQMlY3JaQRslbPLsjEaw8aqNtCwZpKlyvAfUqCPzo+qt7x1r2oICWLA9DS96DJWGsUjDlETt4sKQBbcyfr8WO+WTg1MxiRPzICuOIyEW/A3QBaMH7DijVCNclDfpeGNCBl8ZKc7MIXa6Yw6NlOTDYQK3mzLV1/Z4eWx8NuM4ATLB12m5gKXXALsoa7PFEuqbNkFVrWmrUL70exhhpqF5Td/sFKvjex4Vtp3pLZU9WBd99HfM=
-      - secure: zSx+ONeCVAtyTDmVhhBiBhyH7FLYT4ZvRg/g9HHGKdRFXF58NMYfV1K4R5sSJo570DJ7bCdYmGj7Cr47AKrvh4Ar+3zcHmLe1yor0+ckhMyGno9j7XtPV8LPQe0jMT6nk26IgwwYHrDbuSEFPxcaITW7oj+nNJMjdw74U6EX4Vr2EaM9dGZGVzJi8X87ZzQJTaLL2vLEbYopen+vnamvmobdtN5dKGDUtfwAynQ0uYCug4HDL/G/Hvj4H2cMW/D4OdB8lMDRsH4dPjt3h0ZP1i2NQpTX9TaKws55u3W3TsFhriVBJzcqViPXihXpp6QS7j35zI9mjg7kJkWWCOuC2vIurOJfO4qt8/bwkbuDwsRf8vSFoptpmnNRgRURlLAmnXslqCActH1Mjims41DveWxXpH0gycjUDe2p8Lgk+Kkah3bJ6nQSE92ZhGCw51vRjMblTLTMFTLXaqptiR9Bd0+aDnM1k5QJdF1ULawjW3XnhSb9MW8Yj/R3aF2ZKRid24smEEKvKzChb+de20TGpgJNj2G9DTkoNK3J94CwOcJDicefaKJaORzYgo0APGC91Xt3VK4BU4cxGzeuXaXMLv27utXuqwNoXEmfMPawbWc2eOj96swYvOz4lWBcEO6yVyv6FndA8/lwklLVxxmgg5q8qCheIImeSGerg2/Exrc=
-      - secure: a9ODPa16pDgyNprLusPur2bv9M/nqYprlMKjst7BhbtItf7S4Kj94/XBdiqXjSXIZi2xkMrFCt/QNYJHiO0zkBKnRvNnVznHiiURxyohOPDoD7LOD8IjpPFk9NO3Ji2gVYwzsfrz5AcyNt63FiHcUeIRN/WkxI1qenCnYit7HCYHIfq54z0LOtIev01Mgxwni7fGN1Ew5OkHPsOUs604VRHcFyzSRJnzDOd2pgUrxqByKKA95nnIn91h+v0jDAy+YgG2NJISnsY/j3tNj5MRrXTznKWP5sskQ+w8vEUX2IMrkl2X+/0Xqws1SdKH94kOI2KMH1wwLx7DRhAyUkDqtsAz1VxrmruGL9YlPTmQo+KzL7JCoqoBVWjU1IpoZCuU1BpKqAe8Gs/yDc51h0hEOBkVEg2P++3sDLqyeJdm9p6CU2jP5/3MGogBxLw7Sk3/dHTvngnvEQfU7k+pNvGVXamNrHVCV7skYhIwVpTUB/O/xvwOh9nSY9vTvZHyLA0gjRfTlExKp0HOZDzf/ty2EfyeXh8Crn7MGVAfB+dRTUFAMKylBDbbZlKUq8QV6mxcF9BvWf2+6/PPXBwZOZWTvvhPkwR9z5zeoefTAR4mMBKonjyAPqs7Y11tauD8Ijljni2LKrQmJqOiw4ggwlfrXANRxn8UZByeNfU9GOYDqCc=
-      - secure: qU6Rx870XxZ9wY/X3UjVBeKnKL87nunBYxmsSUmmzcLxUMjpqN0oZqWzUkYzfydY/juBs4SLOK/bX4DWW7MyZMHAvy32BhtYIhPAdx464iNMZJKpUPFo63NJSoZJz7uALmRWu7n4YEtrgGYSDeckmhmdHfDIjKkgCYuColf38NYJc+7V9dGWKxcJyREG52GJoCH6mtjKJPGLC5YQbunydaAvcuAqA89Im9T4objuJj4pXUx69op7qyXtIbY375Piu+h/iASULdiEU3EKjpnOFkLu7LFAUdV85tllgn5wuLYY3eKeC7kOSwTf/ftXuXZe6gJ+9Dylc9SfdeddcThOY2DoKDRGeIKVf6jjJZ0kYWRPMUmIvbchp4PW4HC/kIgKliXufIYeO+fcks0Kh0mITvXXsuyTm7fL+jU+PKRmAOGl8RblfkG3IKCithct88dO4q4Sy7eYUOqdW+Ds2DBocsp1RbsXCMVMPnuAD5SCXBW5eEAxij+s92OTMCz74EFUi+yxRTp/+qVrNxIHOafRIKXMWTm7at5FtCIFtNjNRcovmbdzMDfWmQ/ftWjQi7J2GenutlTuY3e5+oYa9yNI5QMcZnjxpvs+cGJdwHCbhcnqKcaW1uI/lg8ckBm6fDMiQF+MgN29A0ns4CSbzqFrS07+vxq3M8UNhdyIG+wSiSk=
+  global:
+  - secure: kyPnGl1zygrL1CY7aCfOAfPuTwsuadEr8UAyqGsRyqEizhjkVMz12hu6I5An3wwviM6RGppnl52P4Tx96gMKmUDjygHcNx+ci95eloucxQoKjQ1krEvpLmS9KbaGj9uVkqiFVlvfVTi0A3EL2nTn2Sf0p/dtEnao4U9gXpk151IodD+j8K98+okMeKwGVpRy9N0qJrHobdnvsCSRCKaNoAupg0VDmpCQSdycHbmblXUFAHnMHpp3VzkU1DwBKrOwOP4SuE+Dt0qY2Aa8dbfUOfYt5s90/pHxll33cWlfkcEqHRRrPwn8wPov5nYjf/EnMD+eHPK5MsN960LP0TyWn9CGyybxw7QLsQMyZhpggsSsF601hfxYlVQtiPAVvI8sLS7yPNN22QQbLG/pX0Df1hM0KQKcjPu8UesA4bBRukwZpJnSm+5sTYi6d9zM9WxjqA8+ABywVm6yHgbUrnhp3t8C3/ztQRJmmowJ/IkiPKCzTKBiZz5EsgwGuYyn414lfppNc9pdOYR06NVybAglce0J9NkvoUf7mI9C93R7TLNK53s1aIpt8FG3hm1UAFh354/uthR+FdloE80qiokvZCJcNLEjMBBFGsPby6FTZ6afI/J5MeNGeQlSWXva9i7nW0ebqLZVXTHMtiBAMJmgBDhMK/PWWYXTY04XlR9Eif0=
+  - secure: FEsIlM11s2HCCNhvI9ysmItDkhdbhzmYAbW3HOMWDWH6gQIix19rjEYJe98OaQ9Sx7YS4Y3Rr6pMPT42d0jvZt7tHvlv6GaUkJ4oR86QjS0cKJO/QZA+PwL9dGHn85KMYEL9wk7T7mDgQxFCTb2H8WUpeMhWUQxPQf27zWziTBrpd00FCbNtDc2S/1zn45olPSC43J5Ap1+O0OHxQglYTqiq+UbzVfKyEnPdSskUrKYr9do62UCKMecfjS+FE7OEB44WSxVwl6aGGVhPVo1hGolBHXiRNGEw+IGvBua/SVj86NI11vi3PkyM58RiDmfrr7aVlTskRn3/O3GOGoIAKUTP2veYNgeJoJ5pFYWqrNqp6YieTPtBWWVFge4LthTvzQ/S8BAP6QoGLlagnHzpBpiVf7bvS3fPfraYevv9fZ65NKic8m1fLjj+u23kQMlY3JaQRslbPLsjEaw8aqNtCwZpKlyvAfUqCPzo+qt7x1r2oICWLA9DS96DJWGsUjDlETt4sKQBbcyfr8WO+WTg1MxiRPzICuOIyEW/A3QBaMH7DijVCNclDfpeGNCBl8ZKc7MIXa6Yw6NlOTDYQK3mzLV1/Z4eWx8NuM4ATLB12m5gKXXALsoa7PFEuqbNkFVrWmrUL70exhhpqF5Td/sFKvjex4Vtp3pLZU9WBd99HfM=
+  - secure: zSx+ONeCVAtyTDmVhhBiBhyH7FLYT4ZvRg/g9HHGKdRFXF58NMYfV1K4R5sSJo570DJ7bCdYmGj7Cr47AKrvh4Ar+3zcHmLe1yor0+ckhMyGno9j7XtPV8LPQe0jMT6nk26IgwwYHrDbuSEFPxcaITW7oj+nNJMjdw74U6EX4Vr2EaM9dGZGVzJi8X87ZzQJTaLL2vLEbYopen+vnamvmobdtN5dKGDUtfwAynQ0uYCug4HDL/G/Hvj4H2cMW/D4OdB8lMDRsH4dPjt3h0ZP1i2NQpTX9TaKws55u3W3TsFhriVBJzcqViPXihXpp6QS7j35zI9mjg7kJkWWCOuC2vIurOJfO4qt8/bwkbuDwsRf8vSFoptpmnNRgRURlLAmnXslqCActH1Mjims41DveWxXpH0gycjUDe2p8Lgk+Kkah3bJ6nQSE92ZhGCw51vRjMblTLTMFTLXaqptiR9Bd0+aDnM1k5QJdF1ULawjW3XnhSb9MW8Yj/R3aF2ZKRid24smEEKvKzChb+de20TGpgJNj2G9DTkoNK3J94CwOcJDicefaKJaORzYgo0APGC91Xt3VK4BU4cxGzeuXaXMLv27utXuqwNoXEmfMPawbWc2eOj96swYvOz4lWBcEO6yVyv6FndA8/lwklLVxxmgg5q8qCheIImeSGerg2/Exrc=
+  - secure: a9ODPa16pDgyNprLusPur2bv9M/nqYprlMKjst7BhbtItf7S4Kj94/XBdiqXjSXIZi2xkMrFCt/QNYJHiO0zkBKnRvNnVznHiiURxyohOPDoD7LOD8IjpPFk9NO3Ji2gVYwzsfrz5AcyNt63FiHcUeIRN/WkxI1qenCnYit7HCYHIfq54z0LOtIev01Mgxwni7fGN1Ew5OkHPsOUs604VRHcFyzSRJnzDOd2pgUrxqByKKA95nnIn91h+v0jDAy+YgG2NJISnsY/j3tNj5MRrXTznKWP5sskQ+w8vEUX2IMrkl2X+/0Xqws1SdKH94kOI2KMH1wwLx7DRhAyUkDqtsAz1VxrmruGL9YlPTmQo+KzL7JCoqoBVWjU1IpoZCuU1BpKqAe8Gs/yDc51h0hEOBkVEg2P++3sDLqyeJdm9p6CU2jP5/3MGogBxLw7Sk3/dHTvngnvEQfU7k+pNvGVXamNrHVCV7skYhIwVpTUB/O/xvwOh9nSY9vTvZHyLA0gjRfTlExKp0HOZDzf/ty2EfyeXh8Crn7MGVAfB+dRTUFAMKylBDbbZlKUq8QV6mxcF9BvWf2+6/PPXBwZOZWTvvhPkwR9z5zeoefTAR4mMBKonjyAPqs7Y11tauD8Ijljni2LKrQmJqOiw4ggwlfrXANRxn8UZByeNfU9GOYDqCc=
+  - secure: qU6Rx870XxZ9wY/X3UjVBeKnKL87nunBYxmsSUmmzcLxUMjpqN0oZqWzUkYzfydY/juBs4SLOK/bX4DWW7MyZMHAvy32BhtYIhPAdx464iNMZJKpUPFo63NJSoZJz7uALmRWu7n4YEtrgGYSDeckmhmdHfDIjKkgCYuColf38NYJc+7V9dGWKxcJyREG52GJoCH6mtjKJPGLC5YQbunydaAvcuAqA89Im9T4objuJj4pXUx69op7qyXtIbY375Piu+h/iASULdiEU3EKjpnOFkLu7LFAUdV85tllgn5wuLYY3eKeC7kOSwTf/ftXuXZe6gJ+9Dylc9SfdeddcThOY2DoKDRGeIKVf6jjJZ0kYWRPMUmIvbchp4PW4HC/kIgKliXufIYeO+fcks0Kh0mITvXXsuyTm7fL+jU+PKRmAOGl8RblfkG3IKCithct88dO4q4Sy7eYUOqdW+Ds2DBocsp1RbsXCMVMPnuAD5SCXBW5eEAxij+s92OTMCz74EFUi+yxRTp/+qVrNxIHOafRIKXMWTm7at5FtCIFtNjNRcovmbdzMDfWmQ/ftWjQi7J2GenutlTuY3e5+oYa9yNI5QMcZnjxpvs+cGJdwHCbhcnqKcaW1uI/lg8ckBm6fDMiQF+MgN29A0ns4CSbzqFrS07+vxq3M8UNhdyIG+wSiSk=
 notifications:
-   slack:
-      secure: gEvmvW+JVocmwTGuXRF8PNfg00ls2bZh9hzB6Q/YkXsVlw0pSymA6Fxkr0gLjitc7VBU/F8PyqiyLxaHLgjTcer7jEQLYY0ULT5tjX5QmU2+pGii91Xoba+n7mnYeK7ntI3qHB51KH6Hrd28F+D5CyzAyVYhkyEE06dV1qfgB0ipcwnREs8M00Neq688L9mU+uMgy9iHdTpo44wvy9tonRxv6qQYwgdoonPeXtMCwrn89ZqhrOG6fHoCmC0BB+P0eLl40wK03XQ5IIcGGspPdHfZr8dDkAHrJ0p33O9ybQJJ9Dro2ukHcZn/UM3yaZGEsOyvkjkKwAXYp2jjDeVqstFvI+hAvl3HtKSZ4SUsJUsVLU9OiXgwUKRk2hLMR7o4bcwcyvLa+8ydPoqUd7cNhOn0pf6j4HuIoi8LYgSaUQzzmaesnJqJCANavymC9RJ5QfxfdCVnn/G7kptnm9yWS2OvIljZbUPfTZxeNt+Q1Z/jSWozrNKdy4TGgGGtm82xagXC3fVcLV30zbSQfTiCLLpqYxJ2qHYBkxPWh56yrPwzv/j1yPw4CvLDnWW1J93roeHEN1hJ8OULUOdFi1FoV4vm9FiizElWcPeCJKlCPl336k2hnW8reGgXLF9nA/k9fbXujIkDucQXMivLzNgrxOHO5F/Qw4AfTKTZ3K/EAEo=
+  slack:
+    secure: gEvmvW+JVocmwTGuXRF8PNfg00ls2bZh9hzB6Q/YkXsVlw0pSymA6Fxkr0gLjitc7VBU/F8PyqiyLxaHLgjTcer7jEQLYY0ULT5tjX5QmU2+pGii91Xoba+n7mnYeK7ntI3qHB51KH6Hrd28F+D5CyzAyVYhkyEE06dV1qfgB0ipcwnREs8M00Neq688L9mU+uMgy9iHdTpo44wvy9tonRxv6qQYwgdoonPeXtMCwrn89ZqhrOG6fHoCmC0BB+P0eLl40wK03XQ5IIcGGspPdHfZr8dDkAHrJ0p33O9ybQJJ9Dro2ukHcZn/UM3yaZGEsOyvkjkKwAXYp2jjDeVqstFvI+hAvl3HtKSZ4SUsJUsVLU9OiXgwUKRk2hLMR7o4bcwcyvLa+8ydPoqUd7cNhOn0pf6j4HuIoi8LYgSaUQzzmaesnJqJCANavymC9RJ5QfxfdCVnn/G7kptnm9yWS2OvIljZbUPfTZxeNt+Q1Z/jSWozrNKdy4TGgGGtm82xagXC3fVcLV30zbSQfTiCLLpqYxJ2qHYBkxPWh56yrPwzv/j1yPw4CvLDnWW1J93roeHEN1hJ8OULUOdFi1FoV4vm9FiizElWcPeCJKlCPl336k2hnW8reGgXLF9nA/k9fbXujIkDucQXMivLzNgrxOHO5F/Qw4AfTKTZ3K/EAEo=
