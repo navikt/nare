@@ -99,19 +99,21 @@
          </plugin>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>3.1.0</version>
             <executions>
                <execution>
-                  <id>attach-javadocs</id>
+                  <id>empty-javadoc-jar</id>
+                  <phase>package</phase>
                   <goals>
                      <goal>jar</goal>
                   </goals>
+                  <configuration>
+                     <classifier>javadoc</classifier>
+                     <classesDirectory>${basedir}/src/main/javadoc</classesDirectory>
+                  </configuration>
                </execution>
             </executions>
-            <configuration>
-               <doclint>none</doclint>
-               <quiet>true</quiet>
-            </configuration>
          </plugin>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
@@ -156,11 +158,6 @@
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-resources-plugin</artifactId>
                <version>3.1.0</version>
-            </plugin>
-            <plugin>
-               <groupId>org.apache.maven.plugins</groupId>
-               <artifactId>maven-javadoc-plugin</artifactId>
-               <version>3.0.1</version>
             </plugin>
          </plugins>
       </pluginManagement>
