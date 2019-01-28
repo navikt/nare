@@ -27,13 +27,16 @@ script:
      echo "Setting version $VERSION"
      mvn versions:set -DnewVersion="$VERSION"
      mvn versions:commit
+     
+     git config user.name team-helse[bot]
+     git config user.email team-helse[bot]@users.noreply.github.com
 
      git add pom.xml
      git commit -m "Bump version [skip ci]" -m "Caused by $TRAVIS_BUILD_WEB_URL" --author "$ORIGINAL_COMMITTER"
      git push https://x-access-token:$GH_TOKEN@github.com/navikt/nare.git HEAD:master
 
      echo "Running release"
-     travis_wait 50 mvn -q --settings travis/settings.xml deploy -Prelease -DskipTests=true
+     travis_wait 50 mvn --settings travis/settings.xml deploy -Prelease -DskipTests=true
   fi
 env:
   global:
