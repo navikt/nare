@@ -1,4 +1,4 @@
-package no.nav.knare.core.evaluations
+package no.nav.nare.core.evaluations
 
 data class Evaluering(
    val resultat: Resultat,

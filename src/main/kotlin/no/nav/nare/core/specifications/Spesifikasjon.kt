@@ -1,7 +1,7 @@
-package no.nav.knare.core.specifications
+package no.nav.nare.core.specifications
 
-import no.nav.knare.core.evaluations.Evaluering
-import no.nav.knare.core.evaluations.Evaluering.Companion.evaluer
+import no.nav.nare.core.evaluations.Evaluering
+import no.nav.nare.core.evaluations.Evaluering.Companion.evaluer
 
 
 data class Spesifikasjon<T>(

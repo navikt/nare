@@ -1,30 +1,26 @@
-package no.nav.knare.demo
+package no.nav.nare.demo
 
-import no.nav.knare.core.demo.Rolle
-import no.nav.knare.core.demo.Soknad
-import no.nav.knare.core.demo.Soknadstype
-import no.nav.knare.core.demo.Soknadstype.ADOPSJON
-import no.nav.knare.core.demo.Soknadstype.FODSEL
-import no.nav.knare.core.demo.Uttaksplan
-import no.nav.knare.core.demo.Uttaksplan.INNEN_3_AAR
-import no.nav.knare.core.demo.Uttaksplan.SAMMENHENGENDE
-import no.nav.knare.core.evaluations.Evaluering
-import no.nav.knare.core.evaluations.Evaluering.Companion.ja
-import no.nav.knare.core.evaluations.Evaluering.Companion.nei
-import no.nav.knare.core.specifications.Spesifikasjon
+import no.nav.nare.core.demo.*
+import no.nav.nare.core.demo.Rolle.*
+import no.nav.nare.core.demo.Soknadstype.*
+import no.nav.nare.core.demo.Uttaksplan.*
+import no.nav.nare.core.evaluations.Evaluering
+import no.nav.nare.core.evaluations.Evaluering.Companion.ja
+import no.nav.nare.core.evaluations.Evaluering.Companion.nei
+import no.nav.nare.core.specifications.Spesifikasjon
 
 class Regelsett {
 
    private val morHarRettTilForeldrepenger = Spesifikasjon<Soknad>(
       beskrivelse = "Har søker med rolle mor rett til foreldrepenger?",
       identitet = "FK_VK_10.1",
-      implementasjon = { søknad -> søkerHarPåkrevdRolle(Rolle.MOR, søknad) }
+      implementasjon = { søknad -> søkerHarPåkrevdRolle(MOR, søknad) }
    )
 
    private val farHarRettTilForeldrepenger = Spesifikasjon<Soknad>(
       beskrivelse = "Har søker med rolle fae rett til foreldrepenger?",
       identitet = "FK_VK_10.1",
-      implementasjon = { søknad -> søkerHarPåkrevdRolle(Rolle.FAR, søknad) }
+      implementasjon = { søknad -> søkerHarPåkrevdRolle(FAR, søknad) }
    )
 
    private val gjelderSoknadFødsel = Spesifikasjon<Soknad>(
@@ -38,7 +34,8 @@ class Regelsett {
       identitet = "FK_VK 10.23",
       implementasjon = { søknad ->
 
-         soknadGjelder(ADOPSJON, søknad) }
+         soknadGjelder(ADOPSJON, søknad)
+      }
    )
 
 
@@ -46,7 +43,7 @@ class Regelsett {
       beskrivelse = "Foreligger det korrekt uttaksplan etter fødsel?",
       identitet = "FK_VK 10.4/FK_VK 10.5",
       implementasjon = { søknad ->
-         harUttaksplanForModreKvote(FODSEL, SAMMENHENGENDE, søknad) eller
+         harUttaksplanForModreKvote(FODSEL, Uttaksplan.SAMMENHENGENDE, søknad) eller
             harUttaksplanForModreKvote(FODSEL, INNEN_3_AAR, søknad)
       }
    )
@@ -100,7 +97,7 @@ fun søkerHarPåkrevdRolle(rolle: Rolle, søknad: Soknad): Evaluering =
 
 
 fun harUttaksplanForModreKvote(soknadstype: Soknadstype, uttaksplan: Uttaksplan, søknad: Soknad): Evaluering =
-   søknad.hentSøkerIRolle(Rolle.MOR)?.let { mor ->
+   søknad.hentSøkerIRolle(MOR)?.let { mor ->
       mor.uttaksplan?.let { morsUttaksplan ->
          if (morsUttaksplan == uttaksplan)
             ja("Mødrekvote tas ${morsUttaksplan.description}")

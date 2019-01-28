@@ -1,7 +1,7 @@
-package no.nav.knare.demo
+package no.nav.nare.demo
 
 import com.google.gson.Gson
-import no.nav.knare.core.demo.*
+import no.nav.nare.core.demo.*
 import spark.Request
 import spark.Response
 import spark.Spark.*

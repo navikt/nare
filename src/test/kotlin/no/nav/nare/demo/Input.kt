@@ -1,4 +1,4 @@
-package no.nav.knare.core.demo
+package no.nav.nare.core.demo
 
 data class Soknad(val hovedsoker: Person,
                   val medsoker: Person?,

@@ -1,5 +1,5 @@
-import no.nav.knare.core.evaluations.*
-import no.nav.knare.core.specifications.*
+import no.nav.nare.core.evaluations.*
+import no.nav.nare.core.specifications.*
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
 

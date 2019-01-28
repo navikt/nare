@@ -1,4 +1,4 @@
-import no.nav.knare.core.evaluations.*
+import no.nav.nare.core.evaluations.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.params.*
 import org.junit.jupiter.params.provider.*
