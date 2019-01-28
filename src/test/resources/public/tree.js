@@ -109,7 +109,11 @@ function update(source) {
       .attr("dy", "0.35em")
       .attr("text-anchor", "middle")
       .text(function (d) {
-         return d.resultat;
+         switch (d.resultat){
+            case "JA": return "✔️"
+            case "NEI" : return "X"
+            case "KANSKJE": return "?"
+         }
       })
       .on('mouseover', tip.show)
       .on('mouseout', tip.hide)

@@ -8,14 +8,14 @@ import spark.Spark.*
 
 fun main() {
    val gson = Gson()
-   port(1337)
+   port(1339)
    staticFiles.location("/public")
    get("/api", { _: Request, _: Response -> Regelsett().mødrekvote.evaluer(søknad) }, { gson.toJson(it) })
 
 }
 
 private val søknad = Soknad(
-   hovedsoker = Person(name = "Mor", rolle = Rolle.MOR, address = "Oslo", inntekt = 600000, mndArbeid = 24, rettTilFp = true, yrke = "A", uttaksplan = Uttaksplan.SAMMENHENGENDE),
+   hovedsoker = Person(name = "Mor", rolle = Rolle.MOR, address = "Oslo", inntekt = 600000, mndArbeid = 24, rettTilFp = true, yrke = "A", uttaksplan = Uttaksplan.SENERE),
    medsoker = Person(name = "Far", rolle = Rolle.FAR, address = "Oslo", inntekt = 500000, mndArbeid = 80, rettTilFp = true, yrke = "B", uttaksplan = null),
    søknadstype = Soknadstype.FODSEL)
 

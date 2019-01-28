@@ -34,6 +34,8 @@ data class Evaluering(
 
       fun nei(begrunnelse: String) = Evaluering(Resultat.NEI, begrunnelse)
 
+      fun kanskje(begrunnelse: String) = Evaluering(Resultat.KANSKJE, begrunnelse)
+
       fun evaluer(identitet: String, beskrivelse: String, eval: Evaluering) = eval.copy(beskrivelse = beskrivelse, identifikator = identitet)
    }
 

@@ -6,6 +6,7 @@ import no.nav.nare.core.demo.Soknadstype.*
 import no.nav.nare.core.demo.Uttaksplan.*
 import no.nav.nare.core.evaluations.Evaluering
 import no.nav.nare.core.evaluations.Evaluering.Companion.ja
+import no.nav.nare.core.evaluations.Evaluering.Companion.kanskje
 import no.nav.nare.core.evaluations.Evaluering.Companion.nei
 import no.nav.nare.core.specifications.Spesifikasjon
 
@@ -43,15 +44,14 @@ class Regelsett {
       beskrivelse = "Foreligger det korrekt uttaksplan etter fødsel?",
       identitet = "FK_VK 10.4/FK_VK 10.5",
       implementasjon = { søknad ->
-         harUttaksplanForModreKvote(FODSEL, Uttaksplan.SAMMENHENGENDE, søknad) eller
-            harUttaksplanForModreKvote(FODSEL, INNEN_3_AAR, søknad)
+         harUttaksplanForModreKvote(FODSEL, søknad)
       }
    )
 
    private val harUttaksplanEtterAdopsjon = Spesifikasjon<Soknad>(
       beskrivelse = "Foreligger det korrekt uttaksplan etter adopsjon?",
       identitet = "FK_VK 10.6",
-      implementasjon = { søknad -> harUttaksplanForModreKvote(ADOPSJON, INNEN_3_AAR, søknad) }
+      implementasjon = { søknad -> harUttaksplanForModreKvote(ADOPSJON, søknad) }
    )
 
    private val harBeggeForeldreRettTilForeldrepenger = (farHarRettTilForeldrepenger og morHarRettTilForeldrepenger).med(
@@ -96,13 +96,14 @@ fun søkerHarPåkrevdRolle(rolle: Rolle, søknad: Soknad): Evaluering =
    } ?: nei("Søker har ikke rolle $rolle")
 
 
-fun harUttaksplanForModreKvote(soknadstype: Soknadstype, uttaksplan: Uttaksplan, søknad: Soknad): Evaluering =
+fun harUttaksplanForModreKvote(soknadstype: Soknadstype, søknad: Soknad): Evaluering =
    søknad.hentSøkerIRolle(MOR)?.let { mor ->
       mor.uttaksplan?.let { morsUttaksplan ->
-         if (morsUttaksplan == uttaksplan)
-            ja("Mødrekvote tas ${morsUttaksplan.description}")
-         else
-            nei("Mødrekvote tas ikke ${morsUttaksplan.description} $soknadstype")
+         when(morsUttaksplan){
+            SAMMENHENGENDE -> ja("Mødrekvote tas sammenhengende etter $soknadstype")
+            INNEN_3_AAR -> nei("Mødrekvote tas ikke senere enn 3 år etter $soknadstype")
+            SENERE -> kanskje("Saksbehandler må se på dette")
+         }
       } ?: nei("Det foreligger ingen uttaksplan for mor")
    } ?: nei("Søker er ikke mor")
 
