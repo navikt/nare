@@ -23,7 +23,6 @@ script:
       if [ "$TRAVIS_BRANCH" = 'master' ] && [ "$TRAVIS_PULL_REQUEST" == 'false' ]; then
          echo "Importing GPG key into keyring"
          gpg --fast-import travis/codesigning.asc
-         TIME=$(TZ="Europe/Oslo" date +%Y.%m.%d-%H.%M)
          COMMIT=$(git rev-parse --short=12 HEAD)
          VERSION="$COMMIT_SHORT"
          echo "Setting version $VERSION"
