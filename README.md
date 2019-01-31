@@ -1,5 +1,8 @@
 # NARE - Not A Rule Engine
 
+[![Build Status](https://travis-ci.com/navikt/helse-maksdato.svg?branch=master)](https://travis-ci.com/navikt/helse-maksdato)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/no.nav/nare/badge.svg)](https://maven-badges.herokuapp.com/maven-central/no.nav/nare)
+
 NARE is a variation over the Specification pattern, as described by Eric Evans & Martin Fowler here: https://martinfowler.com/apsupp/spec.pdf.
 
 The example implementation provided here evaluates a simplified version of the conditions for receiving "Mødrekvote", a small subset of the overall parental leave. 
