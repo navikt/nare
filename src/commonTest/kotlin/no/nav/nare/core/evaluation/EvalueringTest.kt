@@ -4,8 +4,8 @@ import no.nav.nare.core.evaluations.Evaluering.Companion.nei
 import no.nav.nare.core.evaluations.Operator
 import no.nav.nare.core.evaluations.Resultat.JA
 import no.nav.nare.core.evaluations.Resultat.NEI
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
+import kotlin.test.Test
 
 class EvalueringTest {
 

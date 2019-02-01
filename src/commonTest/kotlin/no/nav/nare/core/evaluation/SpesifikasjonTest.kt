@@ -1,7 +1,6 @@
 import no.nav.nare.core.evaluations.*
 import no.nav.nare.core.specifications.*
-import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.*
 
 class SpesifikasjonTest {
 
