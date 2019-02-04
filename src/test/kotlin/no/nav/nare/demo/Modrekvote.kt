@@ -87,8 +87,7 @@ fun soknadGjelder(søknadstype: Soknadstype, søknad: Soknad): Evaluering =
       nei("Søknad gjelder ikke fødsel")
 
 fun søkerHarPåkrevdRolle(rolle: Rolle, søknad: Soknad): Evaluering =
-
-   søknad.hentSøkerIRolle(rolle)?.let { person ->
+      søknad.hentSøkerIRolle(rolle)?.let { person ->
       if (person.rettTilFp)
          ja("Søker med rolle $rolle har rett til foreldrepenger")
       else
