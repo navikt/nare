@@ -30,11 +30,11 @@ data class Evaluering(
    )
 
    companion object {
-      fun ja(begrunnelse: String) = Evaluering(Resultat.JA, begrunnelse)
+      fun ja(begrunnelse: String) = Evaluering(Resultat.Ja, begrunnelse)
 
-      fun nei(begrunnelse: String) = Evaluering(Resultat.NEI, begrunnelse)
+      fun nei(begrunnelse: String) = Evaluering(Resultat.Nei, begrunnelse)
 
-      fun kanskje(begrunnelse: String) = Evaluering(Resultat.KANSKJE, begrunnelse)
+      fun kanskje(begrunnelse: String) = Evaluering(Resultat.Kanskje, begrunnelse)
 
       fun evaluer(identitet: String, beskrivelse: String, eval: Evaluering) = eval.copy(beskrivelse = beskrivelse, identifikator = identitet)
    }

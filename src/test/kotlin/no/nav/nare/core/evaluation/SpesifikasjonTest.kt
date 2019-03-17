@@ -1,7 +1,9 @@
-import no.nav.nare.core.evaluations.*
-import no.nav.nare.core.specifications.*
-import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.*
+
+import no.nav.nare.core.evaluations.Evaluering
+import no.nav.nare.core.evaluations.Resultat
+import no.nav.nare.core.specifications.Spesifikasjon
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 class SpesifikasjonTest {
 
@@ -21,7 +23,7 @@ class SpesifikasjonTest {
       assertEquals("left beskrivelse ELLER right beskrivelse", actual.beskrivelse)
       assertEquals("left identitet ELLER right identitet", actual.identitet)
       assertEquals(listOf(left, right), actual.children)
-      assertEquals(Resultat.JA, actual.implementasjon.invoke("").resultat)
+      assertEquals(Resultat.Ja, actual.implementasjon.invoke("").resultat)
    }
 
    @Test
@@ -30,7 +32,7 @@ class SpesifikasjonTest {
       assertEquals("left beskrivelse OG right beskrivelse", actual.beskrivelse)
       assertEquals("left identitet OG right identitet", actual.identitet)
       assertEquals(listOf(left, right), actual.children)
-      assertEquals(Resultat.NEI, actual.implementasjon.invoke("").resultat)
+      assertEquals(Resultat.Nei, actual.implementasjon.invoke("").resultat)
    }
 
    @Test
@@ -39,6 +41,6 @@ class SpesifikasjonTest {
       assertEquals("IKKE left beskrivelse", actual.beskrivelse)
       assertEquals("IKKE left identitet", actual.identitet)
       assertEquals(listOf(left), actual.children)
-      assertEquals(Resultat.NEI, actual.implementasjon.invoke("").resultat)
+      assertEquals(Resultat.Nei, actual.implementasjon.invoke("").resultat)
    }
 }
