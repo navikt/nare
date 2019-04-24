@@ -1,9 +1,15 @@
 package no.nav.nare.demo
 
-import no.nav.nare.core.demo.*
-import no.nav.nare.core.demo.Rolle.*
-import no.nav.nare.core.demo.Soknadstype.*
-import no.nav.nare.core.demo.Uttaksplan.*
+import no.nav.nare.core.demo.Rolle
+import no.nav.nare.core.demo.Rolle.FAR
+import no.nav.nare.core.demo.Rolle.MOR
+import no.nav.nare.core.demo.Soknad
+import no.nav.nare.core.demo.Soknadstype
+import no.nav.nare.core.demo.Soknadstype.ADOPSJON
+import no.nav.nare.core.demo.Soknadstype.FODSEL
+import no.nav.nare.core.demo.Uttaksplan.INNEN_3_AAR
+import no.nav.nare.core.demo.Uttaksplan.SAMMENHENGENDE
+import no.nav.nare.core.demo.Uttaksplan.SENERE
 import no.nav.nare.core.evaluations.Evaluering
 import no.nav.nare.core.evaluations.Evaluering.Companion.ja
 import no.nav.nare.core.evaluations.Evaluering.Companion.kanskje
@@ -15,43 +21,39 @@ class Regelsett {
    private val morHarRettTilForeldrepenger = Spesifikasjon<Soknad>(
       beskrivelse = "Har søker med rolle mor rett til foreldrepenger?",
       identitet = "FK_VK_10.1",
-      implementasjon = { søknad -> søkerHarPåkrevdRolle(MOR, søknad) }
+      implementasjon = { søkerHarPåkrevdRolle(MOR, this) }
    )
 
    private val farHarRettTilForeldrepenger = Spesifikasjon<Soknad>(
       beskrivelse = "Har søker med rolle fae rett til foreldrepenger?",
       identitet = "FK_VK_10.1",
-      implementasjon = { søknad -> søkerHarPåkrevdRolle(FAR, søknad) }
+      implementasjon = { søkerHarPåkrevdRolle(FAR, this) }
    )
 
    private val gjelderSoknadFødsel = Spesifikasjon<Soknad>(
       beskrivelse = "Soknad gjelder fødsel?",
       identitet = "FK_VK 10.2",
-      implementasjon = { søknad -> soknadGjelder(FODSEL, søknad) }
+      implementasjon = { soknadGjelder(FODSEL, this) }
    )
 
    private val gjelderSoknadAdopsjon = Spesifikasjon<Soknad>(
       beskrivelse = "Soknad gjelder adopsjon?",
       identitet = "FK_VK 10.23",
-      implementasjon = { søknad ->
-
-         soknadGjelder(ADOPSJON, søknad)
-      }
+      implementasjon = { soknadGjelder(ADOPSJON, this) }
    )
 
 
    private val harUttaksplanEtterFodsel = Spesifikasjon<Soknad>(
       beskrivelse = "Foreligger det korrekt uttaksplan etter fødsel?",
       identitet = "FK_VK 10.4/FK_VK 10.5",
-      implementasjon = { søknad ->
-         harUttaksplanForModreKvote(FODSEL, søknad)
+      implementasjon = { harUttaksplanForModreKvote(FODSEL, this)
       }
    )
 
    private val harUttaksplanEtterAdopsjon = Spesifikasjon<Soknad>(
       beskrivelse = "Foreligger det korrekt uttaksplan etter adopsjon?",
       identitet = "FK_VK 10.6",
-      implementasjon = { søknad -> harUttaksplanForModreKvote(ADOPSJON, søknad) }
+      implementasjon = { harUttaksplanForModreKvote(ADOPSJON, this) }
    )
 
    private val harBeggeForeldreRettTilForeldrepenger = (farHarRettTilForeldrepenger og morHarRettTilForeldrepenger).med(

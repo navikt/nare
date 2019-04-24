@@ -17,6 +17,7 @@
       <junit-jupiter.version>5.3.2</junit-jupiter.version>
       <maven.compiler.source>1.8</maven.compiler.source>
       <maven.compiler.target>1.8</maven.compiler.target>
+      <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
    </properties>
    <dependencies>
