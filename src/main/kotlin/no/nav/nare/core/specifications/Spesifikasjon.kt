@@ -2,13 +2,17 @@ package no.nav.nare.core.specifications
 
 import no.nav.nare.core.evaluations.Evaluering
 import no.nav.nare.core.evaluations.Evaluering.Companion.evaluer
+import java.util.Arrays.asList
 
 
 data class Spesifikasjon<T>(
    val beskrivelse: String,
-   val identitet: String,
+   val identitet: String = "",
    val children: List<Spesifikasjon<T>> = emptyList(),
    val implementasjon: T.() -> Evaluering) {
+
+   val treeChildren: List<Spesifikasjon<T>>
+      get() = (children + children.flatMap { if (it.identitet.isBlank()) it.treeChildren else listOf() })
 
    fun evaluer(t: T): Evaluering {
       return evaluer(
@@ -20,8 +24,7 @@ data class Spesifikasjon<T>(
    infix fun og(other: Spesifikasjon<T>): Spesifikasjon<T> {
       return Spesifikasjon(
          beskrivelse = "$beskrivelse OG ${other.beskrivelse}",
-         identitet = "$identitet OG ${other.identitet}",
-         children = listOf(this, other),
+         children = addChildren(this, other),
          implementasjon = { evaluer(this) og other.evaluer(this) }
       )
    }
@@ -29,8 +32,7 @@ data class Spesifikasjon<T>(
    infix fun eller(other: Spesifikasjon<T>): Spesifikasjon<T> {
       return Spesifikasjon(
          beskrivelse = "$beskrivelse ELLER ${other.beskrivelse}",
-         identitet = "$identitet ELLER ${other.identitet}",
-         children = listOf(this, other),
+         children = addChildren(this, other),
          implementasjon = { evaluer(this) eller other.evaluer(this) }
       )
    }
@@ -38,8 +40,7 @@ data class Spesifikasjon<T>(
    fun ikke(): Spesifikasjon<T> {
       return Spesifikasjon(
          beskrivelse = "IKKE $beskrivelse",
-         identitet = "IKKE $identitet",
-         children = listOf(this),
+            children = (listOf(this)),
          implementasjon = { evaluer(this).ikke() }
       )
    }
@@ -48,6 +49,12 @@ data class Spesifikasjon<T>(
       return this.copy(beskrivelse = beskrivelse, identitet = identitet)
 
    }
-}
 
+   fun addChildren(s: Spesifikasjon<T>, o: Spesifikasjon<T>): List<Spesifikasjon<T>> {
+      if (o.identitet.isBlank() && o.children.isNotEmpty()) return o.children + s
+      if (s.identitet.isBlank() && s.children.isNotEmpty()) return s.children + o
+      return listOf(s, o)
+   }
+
+}
 fun <T> ikke(spec: Spesifikasjon<T>) = spec.ikke()

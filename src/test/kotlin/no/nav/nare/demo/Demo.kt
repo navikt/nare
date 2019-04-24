@@ -21,7 +21,7 @@ fun main() {
    val gson = builder.create()
    port(1339)
    staticFiles.location("/public")
-   get("/api", { _, _ -> Regelsett().mødrekvote.evaluer(søknad) }, { gson.toJson(it) })
+   get("/api", { _, _ -> Regelsett().mødrekvote }, { gson.toJson(it) })
 
 }
 
