@@ -20,39 +20,39 @@ class Regelsett {
 
    private val morHarRettTilForeldrepenger = Spesifikasjon<Soknad>(
       beskrivelse = "Har søker med rolle mor rett til foreldrepenger?",
-      identitet = "FK_VK_10.1",
+      identifikator = "FK_VK_10.1",
       implementasjon = { søkerHarPåkrevdRolle(MOR, this) }
    )
 
    private val farHarRettTilForeldrepenger = Spesifikasjon<Soknad>(
       beskrivelse = "Har søker med rolle fae rett til foreldrepenger?",
-      identitet = "FK_VK_10.1",
+      identifikator = "FK_VK_10.1",
       implementasjon = { søkerHarPåkrevdRolle(FAR, this) }
    )
 
    private val gjelderSoknadFødsel = Spesifikasjon<Soknad>(
       beskrivelse = "Soknad gjelder fødsel?",
-      identitet = "FK_VK 10.2",
+      identifikator = "FK_VK 10.2",
       implementasjon = { soknadGjelder(FODSEL, this) }
    )
 
    private val gjelderSoknadAdopsjon = Spesifikasjon<Soknad>(
       beskrivelse = "Soknad gjelder adopsjon?",
-      identitet = "FK_VK 10.23",
+      identifikator = "FK_VK 10.23",
       implementasjon = { soknadGjelder(ADOPSJON, this) }
    )
 
 
    private val harUttaksplanEtterFodsel = Spesifikasjon<Soknad>(
       beskrivelse = "Foreligger det korrekt uttaksplan etter fødsel?",
-      identitet = "FK_VK 10.4/FK_VK 10.5",
+      identifikator = "FK_VK 10.4/FK_VK 10.5",
       implementasjon = { harUttaksplanForModreKvote(FODSEL, this)
       }
    )
 
    private val harUttaksplanEtterAdopsjon = Spesifikasjon<Soknad>(
       beskrivelse = "Foreligger det korrekt uttaksplan etter adopsjon?",
-      identitet = "FK_VK 10.6",
+      identifikator = "FK_VK 10.6",
       implementasjon = { harUttaksplanForModreKvote(ADOPSJON, this) }
    )
 

@@ -12,14 +12,14 @@ data class Evaluering(
       resultat = resultat og other.resultat,
       begrunnelse = "($begrunnelse OG ${other.begrunnelse})",
       operator = Operator.OG,
-      children = addChildren(this, other)
+      children = addChildren(other)
    )
 
    infix fun eller(other: Evaluering) = Evaluering(
       resultat = resultat eller other.resultat,
       begrunnelse = "($begrunnelse ELLER ${other.begrunnelse})",
       operator = Operator.ELLER,
-      children = addChildren(this, other)
+      children = addChildren(other)
    )
 
    fun ikke() = Evaluering(
@@ -29,10 +29,10 @@ data class Evaluering(
       children = listOf(this)
    )
 
-   fun addChildren(s: Evaluering, o: Evaluering): List<Evaluering> {
-      if (o.identifikator.isBlank() && o.children.isNotEmpty()) return o.children + s
-      if (s.identifikator.isBlank() && s.children.isNotEmpty()) return s.children + o
-      return listOf(s, o)
+   fun addChildren(other: Evaluering): List<Evaluering> {
+      if (this.identifikator.isBlank() && this.children.isNotEmpty()) return this.children + other
+      if (other.identifikator.isBlank() && other.children.isNotEmpty()) return other.children + this
+      return listOf(this, other)
    }
 
    companion object {
@@ -42,7 +42,7 @@ data class Evaluering(
 
       fun kanskje(begrunnelse: String) = Evaluering(Resultat.Kanskje, begrunnelse)
 
-      fun evaluer(identitet: String, beskrivelse: String, eval: Evaluering) = eval.copy(beskrivelse = beskrivelse, identifikator = identitet)
+      fun evaluer(identifikator: String, beskrivelse: String, eval: Evaluering) = eval.copy(identifikator = identifikator, beskrivelse = beskrivelse)
    }
 
 }
