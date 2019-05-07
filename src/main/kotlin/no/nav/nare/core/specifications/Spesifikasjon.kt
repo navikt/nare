@@ -23,7 +23,7 @@ data class Spesifikasjon<T>(
    infix fun og(other: Spesifikasjon<T>): Spesifikasjon<T> {
       return Spesifikasjon(
          beskrivelse = "$beskrivelse OG ${other.beskrivelse}",
-         children = addChildren(other),
+         children = this.specOrChildren() + other.specOrChildren(),
          implementasjon = { evaluer(this) og other.evaluer(this) }
       )
    }
@@ -31,14 +31,14 @@ data class Spesifikasjon<T>(
    infix fun eller(other: Spesifikasjon<T>): Spesifikasjon<T> {
       return Spesifikasjon(
          beskrivelse = "$beskrivelse ELLER ${other.beskrivelse}",
-         children = addChildren(other),
+         children = this.specOrChildren() + other.specOrChildren(),
          implementasjon = { evaluer(this) eller other.evaluer(this) }
       )
    }
 
    fun ikke(): Spesifikasjon<T> {
       return Spesifikasjon(
-         beskrivelse = "IKKE $beskrivelse",
+         beskrivelse = "!$beskrivelse",
          identifikator = "!$identifikator",
          children = listOf(this),
          implementasjon = { evaluer(this).ikke() }
@@ -47,14 +47,10 @@ data class Spesifikasjon<T>(
 
    fun med(identitet: String, beskrivelse: String): Spesifikasjon<T> {
       return this.copy(beskrivelse = beskrivelse, identifikator = identitet)
-
    }
 
-   fun addChildren(other: Spesifikasjon<T>): List<Spesifikasjon<T>> {
-      if (this.identifikator.isBlank() && this.children.isNotEmpty()) return this.children + other
-      if (other.identifikator.isBlank() && other.children.isNotEmpty()) return other.children + this
-      return listOf(this, other)
-   }
+   private fun specOrChildren(): List<Spesifikasjon<T>> =
+      if (identifikator.isBlank() && children.isNotEmpty()) children else listOf(this)
 
 }
 

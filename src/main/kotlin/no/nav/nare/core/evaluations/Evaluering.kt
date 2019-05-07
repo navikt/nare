@@ -3,8 +3,8 @@ package no.nav.nare.core.evaluations
 data class Evaluering(
    val resultat: Resultat,
    val begrunnelse: String,
-   val beskrivelse: String ="",
-   val identifikator: String ="",
+   val beskrivelse: String = "",
+   val identifikator: String = "",
    val operator: Operator = Operator.INGEN,
    var children: List<Evaluering> = emptyList()) {
 
@@ -12,15 +12,15 @@ data class Evaluering(
       resultat = resultat og other.resultat,
       begrunnelse = "($begrunnelse OG ${other.begrunnelse})",
       operator = Operator.OG,
-      children = addChildren(other)
-   )
+      children = this.specOrChildren() + other.specOrChildren()
+      )
 
    infix fun eller(other: Evaluering) = Evaluering(
       resultat = resultat eller other.resultat,
       begrunnelse = "($begrunnelse ELLER ${other.begrunnelse})",
       operator = Operator.ELLER,
-      children = addChildren(other)
-   )
+      children = this.specOrChildren() + other.specOrChildren()
+      )
 
    fun ikke() = Evaluering(
       resultat = resultat.ikke(),
@@ -29,11 +29,8 @@ data class Evaluering(
       children = listOf(this)
    )
 
-   fun addChildren(other: Evaluering): List<Evaluering> {
-      if (this.identifikator.isBlank() && this.children.isNotEmpty()) return this.children + other
-      if (other.identifikator.isBlank() && other.children.isNotEmpty()) return other.children + this
-      return listOf(this, other)
-   }
+   private fun specOrChildren(): List<Evaluering> =
+      if (identifikator.isBlank() && children.isNotEmpty()) children else listOf(this)
 
    companion object {
       fun ja(begrunnelse: String) = Evaluering(Resultat.Ja, begrunnelse)

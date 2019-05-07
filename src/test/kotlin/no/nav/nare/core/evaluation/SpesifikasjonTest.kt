@@ -2,6 +2,7 @@
 import no.nav.nare.core.evaluations.Evaluering
 import no.nav.nare.core.evaluations.Resultat
 import no.nav.nare.core.specifications.Spesifikasjon
+import no.nav.nare.core.specifications.ikke
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -42,20 +43,25 @@ class SpesifikasjonTest {
    @Test
    fun ikke() {
       val actual = leaf1.ikke()
-      assertEquals("IKKE leaf1 beskrivelse", actual.beskrivelse)
+      assertEquals("!leaf1 beskrivelse", actual.beskrivelse)
       assertEquals(listOf(leaf1), actual.children)
       assertEquals(Resultat.Nei, actual.implementasjon.invoke("").resultat)
    }
 
 
    @Test
-   fun test_flatten(){
+   fun `removes one intermediate node`(){
       val intermediate = (leaf2 og leaf1)
       val root = (intermediate og leaf3).med(identitet = "root", beskrivelse = "beskrivelse")
-
-      assertEquals(3, root.treeChildren.size)
       assertEquals(3, root.children.size)
-
-
    }
+
+   @Test
+   fun `removes two intermediate nodes`(){
+      val intermediate1 = (leaf2 og leaf1)
+      val intermediate2 = (leaf2 og leaf1)
+      val root = (intermediate1 og intermediate2 ).med(identitet = "root", beskrivelse = "beskrivelse")
+      assertEquals(4, root.children.size)
+   }
+
 }
