@@ -2,7 +2,6 @@
 import no.nav.nare.core.evaluations.Evaluering
 import no.nav.nare.core.evaluations.Resultat
 import no.nav.nare.core.specifications.Spesifikasjon
-import no.nav.nare.core.specifications.ikke
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -52,7 +51,7 @@ class SpesifikasjonTest {
    @Test
    fun `removes one intermediate node`(){
       val intermediate = (leaf2 og leaf1)
-      val root = (intermediate og leaf3).med(identitet = "root", beskrivelse = "beskrivelse")
+      val root = (intermediate og leaf3).med(identifikator = "root", beskrivelse = "beskrivelse")
       assertEquals(3, root.children.size)
    }
 
@@ -60,7 +59,7 @@ class SpesifikasjonTest {
    fun `removes two intermediate nodes`(){
       val intermediate1 = (leaf2 og leaf1)
       val intermediate2 = (leaf2 og leaf1)
-      val root = (intermediate1 og intermediate2 ).med(identitet = "root", beskrivelse = "beskrivelse")
+      val root = (intermediate1 og intermediate2 ).med(identifikator = "root", beskrivelse = "beskrivelse")
       assertEquals(4, root.children.size)
    }
 
