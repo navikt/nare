@@ -19,68 +19,67 @@ import no.nav.nare.core.specifications.Spesifikasjon
 class Regelsett {
 
    private val morHarRettTilForeldrepenger = Spesifikasjon<Soknad>(
-      beskrivelse = "Har søker med rolle mor rett til foreldrepenger?",
       identifikator = "FK_VK_10.1",
+      beskrivelse = "Har søker med rolle mor rett til foreldrepenger?",
       implementasjon = { søkerHarPåkrevdRolle(MOR, this) }
    )
 
    private val farHarRettTilForeldrepenger = Spesifikasjon<Soknad>(
-      beskrivelse = "Har søker med rolle fae rett til foreldrepenger?",
       identifikator = "FK_VK_10.1",
+      beskrivelse = "Har søker med rolle fae rett til foreldrepenger?",
       implementasjon = { søkerHarPåkrevdRolle(FAR, this) }
    )
 
    private val gjelderSoknadFødsel = Spesifikasjon<Soknad>(
-      beskrivelse = "Soknad gjelder fødsel?",
       identifikator = "FK_VK 10.2",
+      beskrivelse = "Soknad gjelder fødsel?",
       implementasjon = { soknadGjelder(FODSEL, this) }
    )
 
    private val gjelderSoknadAdopsjon = Spesifikasjon<Soknad>(
-      beskrivelse = "Soknad gjelder adopsjon?",
       identifikator = "FK_VK 10.23",
+      beskrivelse = "Soknad gjelder adopsjon?",
       implementasjon = { soknadGjelder(ADOPSJON, this) }
    )
 
 
    private val harUttaksplanEtterFodsel = Spesifikasjon<Soknad>(
-      beskrivelse = "Foreligger det korrekt uttaksplan etter fødsel?",
       identifikator = "FK_VK 10.4/FK_VK 10.5",
+      beskrivelse = "Foreligger det korrekt uttaksplan etter fødsel?",
       implementasjon = { harUttaksplanForModreKvote(FODSEL, this)
       }
    )
 
    private val harUttaksplanEtterAdopsjon = Spesifikasjon<Soknad>(
-      beskrivelse = "Foreligger det korrekt uttaksplan etter adopsjon?",
       identifikator = "FK_VK 10.6",
+      beskrivelse = "Foreligger det korrekt uttaksplan etter adopsjon?",
       implementasjon = { harUttaksplanForModreKvote(ADOPSJON, this) }
    )
 
    private val harBeggeForeldreRettTilForeldrepenger = (farHarRettTilForeldrepenger og morHarRettTilForeldrepenger).med(
-      identitet = "FK_VK_1.3",
+      identifikator = "FK_VK_1.3",
       beskrivelse = "Har begge foreldre rett til foreldrepenger?"
    )
-   private val vilkårForFødsel =(
-      harBeggeForeldreRettTilForeldrepenger og
-         gjelderSoknadFødsel og harUttaksplanEtterFodsel).med(identitet = "FK_VK 1.11", beskrivelse = "Er vilkår for fødsel oppfylt")
-
+   private val vilkårForFødsel =(harBeggeForeldreRettTilForeldrepenger og gjelderSoknadFødsel og harUttaksplanEtterFodsel).med(
+      identifikator = "FK_VK 1.11",
+      beskrivelse = "Er vilkår for fødsel oppfylt"
+   )
 
    private val vilkårForAdopsjon =(
       harBeggeForeldreRettTilForeldrepenger og
          gjelderSoknadFødsel.ikke() og
          gjelderSoknadAdopsjon og
          harUttaksplanEtterAdopsjon).med(
-      identitet = "FK_VK 1.2",
+      identifikator = "FK_VK 1.2",
       beskrivelse = "Er vilkår for adopsjon oppfylt?"
    )
 
    val mødrekvote = (vilkårForFødsel eller vilkårForAdopsjon).med(
-      identitet = "FK_VK_1",
+      identifikator = "FK_VK_1",
       beskrivelse =  "Er vilkår for mødrekvote oppfylt?"
    )
 
 }
-
 
 fun soknadGjelder(søknadstype: Soknadstype, søknad: Soknad): Evaluering =
    if (søknad.søknadstype == søknadstype)

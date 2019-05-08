@@ -42,8 +42,8 @@ data class Spesifikasjon<T>(
       )
    }
 
-   fun med(identitet: String, beskrivelse: String): Spesifikasjon<T> {
-      return this.copy(beskrivelse = beskrivelse, identifikator = identitet)
+   fun med(identifikator: String, beskrivelse: String): Spesifikasjon<T> {
+      return this.copy(identifikator = identifikator, beskrivelse = beskrivelse)
    }
 
    private fun specOrChildren(): List<Spesifikasjon<T>> =
