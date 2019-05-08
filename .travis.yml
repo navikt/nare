@@ -13,8 +13,6 @@ before_install:
 - export COMMIT_SHORT=$(git rev-parse --short HEAD)
 - export ORIGINAL_COMMITTER=$(git log -1 --pretty=format:'%an <%ae>')
 - echo -e "machine github.com\n  login $GH_TOKEN" > ~/.netrc
-- rm "${JAVA_HOME}/lib/security/cacerts"
-- ln -s /etc/ssl/certs/java/cacerts "${JAVA_HOME}/lib/security/cacerts"
 script:
 - mvn clean install
 - |
