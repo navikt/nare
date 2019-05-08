@@ -1,35 +1,25 @@
 package no.nav.nare.core.evaluations
 
-import no.nav.nare.core.evaluations.Resultat.Ja
-import no.nav.nare.core.evaluations.Resultat.Kanskje
-import no.nav.nare.core.evaluations.Resultat.Nei
+enum class Resultat {
+   JA {
+      override infix fun og(other: Resultat): Resultat = other
+      override infix fun eller(other: Resultat): Resultat = JA
+      override fun ikke(): Resultat = NEI
+   },
 
-sealed class Resultat {
-   object Ja: Resultat()
-   object Nei: Resultat()
-   object Kanskje: Resultat()
-}
+   NEI {
+      override infix fun og(other: Resultat): Resultat = NEI
+      override infix fun eller(other: Resultat): Resultat = other
+      override fun ikke(): Resultat = JA
+   },
 
-infix fun Resultat.og(other: Resultat) = when (this) {
-   is Ja -> other
-   is Nei -> Nei
-   is Kanskje -> when (other) {
-      is Ja -> Kanskje
-      else -> other
-   }
-}
+   KANSKJE {
+      override infix fun og(other: Resultat): Resultat = if (other == JA) KANSKJE else other
+      override infix fun eller(other: Resultat): Resultat = if (other == NEI) KANSKJE else other
+      override fun ikke(): Resultat = KANSKJE
+   };
 
-infix fun Resultat.eller(other: Resultat) = when (this) {
-   is Ja -> Ja
-   is Nei -> other
-   is Kanskje -> when (other) {
-      is Nei -> Kanskje
-      else -> other
-   }
-}
-
-fun Resultat.ikke() = when (this) {
-   is Ja -> Nei
-   is Nei -> Ja
-   is Kanskje -> Kanskje
+   abstract infix fun og(other: Resultat): Resultat
+   abstract infix fun eller(other: Resultat): Resultat
+   abstract fun ikke(): Resultat
 }

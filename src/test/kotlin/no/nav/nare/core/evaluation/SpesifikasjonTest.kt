@@ -28,7 +28,7 @@ class SpesifikasjonTest {
       val actual = leaf1 eller leaf2
       assertEquals("leaf1 beskrivelse ELLER leaf2 beskrivelse", actual.beskrivelse)
       assertEquals(listOf(leaf1, leaf2), actual.children)
-      assertEquals(Resultat.Ja, actual.implementasjon.invoke("").resultat)
+      assertEquals(Resultat.JA, actual.implementasjon.invoke("").resultat)
    }
 
    @Test
@@ -36,7 +36,7 @@ class SpesifikasjonTest {
       val actual = leaf1 og leaf2
       assertEquals("leaf1 beskrivelse OG leaf2 beskrivelse", actual.beskrivelse)
       assertEquals(listOf(leaf1, leaf2), actual.children)
-      assertEquals(Resultat.Nei, actual.implementasjon.invoke("").resultat)
+      assertEquals(Resultat.NEI, actual.implementasjon.invoke("").resultat)
    }
 
    @Test
@@ -44,7 +44,7 @@ class SpesifikasjonTest {
       val actual = leaf1.ikke()
       assertEquals("!leaf1 beskrivelse", actual.beskrivelse)
       assertEquals(listOf(leaf1), actual.children)
-      assertEquals(Resultat.Nei, actual.implementasjon.invoke("").resultat)
+      assertEquals(Resultat.NEI, actual.implementasjon.invoke("").resultat)
    }
 
 

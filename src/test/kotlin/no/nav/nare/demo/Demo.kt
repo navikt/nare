@@ -16,8 +16,6 @@ import spark.Spark.staticFiles
 
 fun main() {
    val builder = GsonBuilder()
-   builder.registerTypeHierarchyAdapter(Resultat::class.java, ResultatAdapter())
-
    val gson = builder.create()
    port(1339)
    staticFiles.location("/public")
@@ -30,17 +28,3 @@ private val søknad = Soknad(
    medsoker = Person(name = "Far", rolle = Rolle.FAR, address = "Oslo", inntekt = 500000, mndArbeid = 80, rettTilFp = true, yrke = "B", uttaksplan = null),
    søknadstype = Soknadstype.FODSEL)
 
-class ResultatAdapter: TypeAdapter<Resultat>() {
-   override fun write(writer: JsonWriter?, value: Resultat?) {
-      value?.let {
-         writer?.value(when (it) {
-            is Resultat.Ja -> "JA"
-            is Resultat.Nei -> "NEI"
-            is Resultat.Kanskje -> "KANSKJE"
-         })
-      } ?: writer?.nullValue()
-   }
-
-   override fun read(reader: JsonReader?) = TODO("not implemented")
-
-}

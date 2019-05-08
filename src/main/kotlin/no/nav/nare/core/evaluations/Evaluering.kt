@@ -33,11 +33,11 @@ data class Evaluering(
       if (identifikator.isBlank() && children.isNotEmpty()) children else listOf(this)
 
    companion object {
-      fun ja(begrunnelse: String) = Evaluering(Resultat.Ja, begrunnelse)
+      fun ja(begrunnelse: String) = Evaluering(Resultat.JA, begrunnelse)
 
-      fun nei(begrunnelse: String) = Evaluering(Resultat.Nei, begrunnelse)
+      fun nei(begrunnelse: String) = Evaluering(Resultat.NEI, begrunnelse)
 
-      fun kanskje(begrunnelse: String) = Evaluering(Resultat.Kanskje, begrunnelse)
+      fun kanskje(begrunnelse: String) = Evaluering(Resultat.KANSKJE, begrunnelse)
 
       fun evaluer(identifikator: String, beskrivelse: String, eval: Evaluering) = eval.copy(identifikator = identifikator, beskrivelse = beskrivelse)
    }
