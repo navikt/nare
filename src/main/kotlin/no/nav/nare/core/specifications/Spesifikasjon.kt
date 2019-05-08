@@ -6,22 +6,21 @@ import no.nav.nare.core.evaluations.Evaluering.Companion.evaluer
 
 data class Spesifikasjon<T>(
    val beskrivelse: String,
-   val identitet: String,
+   val identifikator: String = "",
    val children: List<Spesifikasjon<T>> = emptyList(),
    val implementasjon: T.() -> Evaluering) {
 
    fun evaluer(t: T): Evaluering {
       return evaluer(
          beskrivelse = beskrivelse,
-         identitet = identitet,
+         identifikator = identifikator,
          eval = t.implementasjon())
    }
 
    infix fun og(other: Spesifikasjon<T>): Spesifikasjon<T> {
       return Spesifikasjon(
          beskrivelse = "$beskrivelse OG ${other.beskrivelse}",
-         identitet = "$identitet OG ${other.identitet}",
-         children = listOf(this, other),
+         children = this.specOrChildren() + other.specOrChildren(),
          implementasjon = { evaluer(this) og other.evaluer(this) }
       )
    }
@@ -29,25 +28,27 @@ data class Spesifikasjon<T>(
    infix fun eller(other: Spesifikasjon<T>): Spesifikasjon<T> {
       return Spesifikasjon(
          beskrivelse = "$beskrivelse ELLER ${other.beskrivelse}",
-         identitet = "$identitet ELLER ${other.identitet}",
-         children = listOf(this, other),
+         children = this.specOrChildren() + other.specOrChildren(),
          implementasjon = { evaluer(this) eller other.evaluer(this) }
       )
    }
 
    fun ikke(): Spesifikasjon<T> {
       return Spesifikasjon(
-         beskrivelse = "IKKE $beskrivelse",
-         identitet = "IKKE $identitet",
+         beskrivelse = "!$beskrivelse",
+         identifikator = "!$identifikator",
          children = listOf(this),
          implementasjon = { evaluer(this).ikke() }
       )
    }
 
    fun med(identitet: String, beskrivelse: String): Spesifikasjon<T> {
-      return this.copy(beskrivelse = beskrivelse, identitet = identitet)
-
+      return this.copy(beskrivelse = beskrivelse, identifikator = identitet)
    }
+
+   private fun specOrChildren(): List<Spesifikasjon<T>> =
+      if (identifikator.isBlank() && children.isNotEmpty()) children else listOf(this)
+
 }
 
 fun <T> ikke(spec: Spesifikasjon<T>) = spec.ikke()
