@@ -10,9 +10,6 @@ data class Spesifikasjon<T>(
    val children: List<Spesifikasjon<T>> = emptyList(),
    val implementasjon: T.() -> Evaluering) {
 
-   val treeChildren: List<Spesifikasjon<T>>
-      get() = (children + children.flatMap { if (it.identifikator.isBlank()) it.treeChildren else listOf() })
-
    fun evaluer(t: T): Evaluering {
       return evaluer(
          beskrivelse = beskrivelse,
