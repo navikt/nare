@@ -26,9 +26,10 @@ script:
      mvn versions:set -DnewVersion="$VERSION"
      mvn versions:commit
 
-     echo "Running release"
-     mvn --settings travis/settings.xml deploy -Prelease -DskipTests=true
+     echo "\n\nRunning github release"
      mvn --settings travis/settings.xml deploy -Pgithub -DskipTests=true
+     echo "\n\nRunning maven central release"
+     mvn --settings travis/settings.xml deploy -PmavenCentral -DskipTests=true
   fi
 env:
   global:
